@@ -20,5 +20,6 @@ public class Football extends Sprite {
 	
 	public void update(float deltaTime) {
 		pos = physics.update(deltaTime, pos);
+		hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());
 	}
 }

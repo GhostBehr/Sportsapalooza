@@ -5,13 +5,18 @@ import java.util.List;
 
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 public class Game {
 	
-	List<FootballPlayer> dudes;
-	Football ball;
-	Sprite dugoutOne;
-	Sprite dugoutTwo;
+	private List<FootballPlayer> dudes;
+	private Football ball;
+	private Sprite leftDugout;
+	private Sprite rightDugout;
+	private Button leftEndzone;
+	private Button rightEndzone;
+	private float endzoneOffset;
+	private RectF bounds;
 	
 	public Game(GameView gameView) {
 		dudes = new ArrayList<FootballPlayer>(6);
@@ -21,14 +26,22 @@ public class Game {
 		
 		ball = new Football(gameView, null, null);
 		
+		leftDugout = new Sprite(gameView, null, null);
+		rightDugout = new Sprite(gameView, null, null);
 		
+		leftEndzone = new Button(gameView, null, null, null, null);
+		rightEndzone = new Button(gameView, null, null, null, null);
+		
+		bounds.set(0, 0, 200, 200);
 	}
 	
 	public void update(float deltaTime) {
+		//make sure bounds.contains(RectF) returns true for all the stuff?
 		for (FootballPlayer dude : dudes){
 			dude.update(deltaTime);
 		}
 		ball.update(deltaTime);
+		//Endzone.pos = new PointF(Endzone.pos.x, ball.pos.y +/- endzoneoffset);
 	}
 	
 	public void onDraw(Canvas canvas) {
@@ -36,5 +49,7 @@ public class Game {
 			dude.onDraw(canvas);
 		}
 		ball.onDraw(canvas);
+		leftDugout.onDraw(canvas);
+		rightDugout.onDraw(canvas);
 	}
 }
