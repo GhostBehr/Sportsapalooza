@@ -27,7 +27,10 @@ public class Sprite {
 		this.bmp = bmp;
 		this.pos = pos;
 		this.rot = rot;
-		hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());
+		
+		if (bmp != null) { 													// this if doesn't solve anything
+//			hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());		// this line crashes shit
+		}
 	}
 	
 	public void onDraw(Canvas canvas) {

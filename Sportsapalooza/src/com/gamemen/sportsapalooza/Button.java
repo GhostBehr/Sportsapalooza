@@ -45,6 +45,9 @@ public class Button extends Sprite implements OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		System.out.println("onTouch");
+		System.out.println("getX: " + event.getX());
+		System.out.println("getRawX: " + event.getRawX());
+		System.out.println("getXPrecision: " + event.getXPrecision());
 		
 		// if in hitbox
 		switch(event.getAction()) {

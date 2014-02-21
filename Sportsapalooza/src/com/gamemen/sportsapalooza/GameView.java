@@ -17,7 +17,13 @@ public class GameView extends SurfaceView {
 	private GameLoop gameLoop;
 	
 	private GameStates currentState;
+	private boolean initialized;
 	
+	// Bitmaps
+	private Bitmap btnUp;
+	private Bitmap btnDown;
+	
+	// Objects
 	private Button testButt;
 	
 	public enum GameStates {
@@ -64,15 +70,27 @@ public class GameView extends SurfaceView {
 		////////////////////////////////////////////////////////
 		
 		currentState = GameStates.MAIN_MENU;
-		
-		Bitmap btnUp = BitmapFactory.decodeResource(getResources(), R.drawable.btn_up);
-		Bitmap btnDown = BitmapFactory.decodeResource(getResources(), R.drawable.btn_down);
-		
+		initialized = false;
+		loadResources();
+	}
+	
+	private void loadResources() {
+		btnUp = BitmapFactory.decodeResource(getResources(), R.drawable.btn_up);
+		btnDown = BitmapFactory.decodeResource(getResources(), R.drawable.btn_down);
+	}
+	
+	private void init() {
 		testButt = new Button(this, btnUp, btnDown, ButtonID.PLAY, new PointF(10, 10), 0);
 		this.setOnTouchListener(testButt);
+		
+		initialized = true;
 	}
 	
 	protected void update(float deltaTime) {
+		if (!initialized) {
+			init();
+		}
+		
 		if (currentState == GameStates.PLAYING) {
 			// game.update()
 		}
