@@ -1,8 +1,13 @@
 package com.gamemen.sportsapalooza;
 
+import com.gamemen.sportsapalooza.Button.ButtonID;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -59,6 +64,12 @@ public class GameView extends SurfaceView {
 		////////////////////////////////////////////////////////
 		
 		currentState = GameStates.MAIN_MENU;
+		
+		Bitmap btnUp = BitmapFactory.decodeResource(getResources(), R.drawable.btn_up);
+		Bitmap btnDown = BitmapFactory.decodeResource(getResources(), R.drawable.btn_down);
+		
+		testButt = new Button(this, btnUp, btnDown, ButtonID.PLAY, new PointF(10, 10), 0);
+		this.setOnTouchListener(testButt);
 	}
 	
 	protected void update(float deltaTime) {
@@ -71,6 +82,7 @@ public class GameView extends SurfaceView {
 		canvas.drawColor(Color.BLACK);
 		
 		// draw stuff
+		testButt.onDraw(canvas);
 	}
 	
 	/////////////////////////////////////////////////////////////
