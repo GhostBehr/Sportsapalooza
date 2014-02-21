@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 
 public class Game {
 	
+	
+	
 	public Game() {
 		
 	}

@@ -9,9 +9,11 @@ public class ForceMotion {
 	ForceMotion(float mass) {
 		this(mass, new PointF(0, 0), new PointF(0, 0), new PointF(0, 0));
 	}
+	
 	ForceMotion(float mass, PointF initVel) {
 		this(mass, initVel, new PointF(0, 0), new PointF(0, 0));
 	}
+	
 	ForceMotion(float mass, PointF initVel, PointF constForce, PointF impulseForce) {
 		this.mass = mass;
 		this.vel = initVel;
