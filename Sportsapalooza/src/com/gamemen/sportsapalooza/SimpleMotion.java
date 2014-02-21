@@ -1,4 +1,4 @@
-package com.gamemen.sportsapalooza;
+ package com.gamemen.sportsapalooza;
 
 import android.graphics.PointF;
 
@@ -9,6 +9,10 @@ public class SimpleMotion {
 		this(new PointF(0, 0));
 	}
 	SimpleMotion(PointF speed) {
+		this.speed = speed;
+	}
+	
+	public void setSpeed(PointF speed) {
 		this.speed = speed;
 	}
 	

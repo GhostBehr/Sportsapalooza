@@ -3,6 +3,7 @@ package com.gamemen.sportsapalooza;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 // TODO:
 // - apply rotation to draw somehow
@@ -13,6 +14,7 @@ public class Sprite {
 	protected Bitmap bmp;
 	protected PointF pos;
 	protected float rot;
+	protected RectF hitBox;
 	
 	public Sprite(GameView gameView, Bitmap bmp) {
 		this(gameView, bmp, new PointF(0, 0), 0);
@@ -25,6 +27,7 @@ public class Sprite {
 		this.bmp = bmp;
 		this.pos = pos;
 		this.rot = rot;
+		hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());
 	}
 	
 	public void onDraw(Canvas canvas) {
