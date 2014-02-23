@@ -44,38 +44,45 @@ public class Button extends Sprite implements OnTouchListener {
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		System.out.println("onTouch");
-		System.out.println("getX: " + event.getX());
-		System.out.println("getRawX: " + event.getRawX());
-		System.out.println("getXPrecision: " + event.getXPrecision());
+		PointF touchPos = new PointF(event.getX(), event.getY());
 		
-		// if in hitbox
-		switch(event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				if (state == ButtonState.UP) {
-					state = ButtonState.HELD;
-					if (bmp == buttonUp) {
-						bmp = buttonDown;
+		if (getBounds().contains(touchPos.x, touchPos.y)) {
+			switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					if (state == ButtonState.UP) {
+						state = ButtonState.HELD;
+						if (getBmp() == buttonUp) {
+							setBmp(buttonDown);
+						}
+						
+						System.out.println("BtnDown");
 					}
-				}
-				break;
-				
-			case MotionEvent.ACTION_UP:
-				if (state == ButtonState.HELD) {
-					state = ButtonState.TAPPED;
-					if (bmp == buttonDown) {
-						bmp = buttonUp;
+					break;
+					
+				case MotionEvent.ACTION_UP:
+					if (state == ButtonState.HELD) {
+						state = ButtonState.TAPPED;
+						if (getBmp() == buttonDown) {
+							setBmp(buttonUp);
+						}
+						
+						System.out.println("BtnUp");
 					}
-				}
-				break;
-				
-			case MotionEvent.ACTION_MOVE:
-				// if outside window, reset
-				break;
-				
-			case MotionEvent.ACTION_CANCEL:
+					break;
+					
+				case MotionEvent.ACTION_CANCEL:
+					resetState();
+					
+					System.out.println("CancelBtn");
+					break;
+			}
+		}
+		else {		// Moved off of button while held
+			if (event.getAction() == MotionEvent.ACTION_MOVE && state == ButtonState.HELD) {
 				resetState();
-				break;
+				
+				System.out.println("BtnMoveAway");
+			}
 		}
 		
 		return true;
@@ -87,8 +94,8 @@ public class Button extends Sprite implements OnTouchListener {
 	
 	public void resetState() {
 		state = ButtonState.UP;
-		if (bmp == buttonDown) {
-			bmp = buttonUp;
+		if (getBmp() == buttonDown) {
+			setBmp(buttonUp);
 		}
 	}
 	

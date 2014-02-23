@@ -8,7 +8,6 @@ import android.graphics.RectF;
 public class Football extends Sprite {
 
 	private ForceMotion physics;
-	RectF hitbox;
 	
 	public Football(GameView gameView, Bitmap bmp, PointF pos) {
 		super(gameView, bmp, pos);
@@ -20,6 +19,5 @@ public class Football extends Sprite {
 	
 	public void update(float deltaTime) {
 		pos = physics.update(deltaTime, pos);
-		hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());
 	}
 }

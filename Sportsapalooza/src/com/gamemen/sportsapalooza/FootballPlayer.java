@@ -18,6 +18,5 @@ public class FootballPlayer extends Sprite {
 	
 	public void update(float deltaTime) {
 		pos = motion.update(deltaTime, pos);
-		hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());
 	}
 }

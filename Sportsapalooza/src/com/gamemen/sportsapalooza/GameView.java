@@ -1,6 +1,7 @@
 package com.gamemen.sportsapalooza;
 
 import com.gamemen.sportsapalooza.Button.ButtonID;
+import com.gamemen.sportsapalooza.Button.ButtonState;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -90,6 +91,16 @@ public class GameView extends SurfaceView {
 		if (!initialized) {
 			init();
 		}
+		
+		// BUTTONS
+		/////////////////////////////////////
+		
+		if (testButt.getState() == ButtonState.TAPPED) {
+			testButt.resetState();
+		}
+		
+		// UPDATES
+		/////////////////////////////////////
 		
 		if (currentState == GameStates.PLAYING) {
 			// game.update()

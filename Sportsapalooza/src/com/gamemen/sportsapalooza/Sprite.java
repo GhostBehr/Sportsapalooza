@@ -11,10 +11,10 @@ import android.graphics.RectF;
 
 public class Sprite {
 	protected GameView gameView;
-	protected Bitmap bmp;
+	private Bitmap bmp;
 	protected PointF pos;
 	protected float rot;
-	protected RectF hitBox;
+	private RectF bounds;
 	
 	public Sprite(GameView gameView, Bitmap bmp) {
 		this(gameView, bmp, new PointF(0, 0), 0);
@@ -28,12 +28,31 @@ public class Sprite {
 		this.pos = pos;
 		this.rot = rot;
 		
-		if (bmp != null) { 													// this if doesn't solve anything
-//			hitBox.set(pos.x, pos.y, bmp.getWidth(), bmp.getHeight());		// this line crashes shit
-		}
+		bounds = new RectF(0, 0, bmp.getWidth(), bmp.getHeight());
 	}
 	
 	public void onDraw(Canvas canvas) {
 		canvas.drawBitmap(bmp, pos.x, pos.y, null);
 	}
+	
+	//////////////////////////////////////////////////////
+	// GETTERS AND SETTERS
+	/////////////////////////////////////////////////////
+	public RectF getBounds() {
+		return new RectF(pos.x, pos.y, bounds.width(), bounds.height());
+	}
+	
+	public Bitmap getBmp() {
+		return bmp;
+	}
+	
+	protected void setBmp(Bitmap bmp) {
+		this.bmp = bmp;
+	}
+	
+	protected void setBmp(Bitmap bmp, boolean setBounds) {
+		this.bmp = bmp;
+		bounds = new RectF(pos.x, pos.y, bounds.width(), bounds.height());
+	}
+	
 }
