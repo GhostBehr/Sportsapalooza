@@ -57,7 +57,7 @@ public class Button extends Sprite implements OnTouchListener {
 			switch(event.getActionMasked()) {
 				case MotionEvent.ACTION_POINTER_DOWN:
 				case MotionEvent.ACTION_DOWN:
-					pointers.add(pointerID);						// add pointer to list 
+					pointers.add(pointerID);						// add pointer to list
 					
 					if (state == ButtonState.UP) {
 						state = ButtonState.HELD;
@@ -88,22 +88,21 @@ public class Button extends Sprite implements OnTouchListener {
 					break;
 			}
 		}
-		else {		// Moved off of button while held
-			if (event.getActionMasked() == MotionEvent.ACTION_MOVE && state == ButtonState.HELD) {	// if motion event out of bounds
-				int pointerCount = event.getPointerCount();
-				
-				for (int p = 0; p < pointerCount; ++p) {
-					pointerID = event.getPointerId(p);
-					
+		else if (event.getActionMasked() == MotionEvent.ACTION_MOVE && state == ButtonState.HELD) {	// if ACTION_MOVE away from a held button
+			int pointerCount = event.getPointerCount();
+			
+			for (int p = 0; p < pointerCount; ++p) {				// for each ACTION_MOVE pointer
+				pointerID = event.getPointerId(p);
+				pointerPos = new PointF(event.getX(p), event.getY(p));
+
+				if (!getBounds().contains(pointerPos.x, pointerPos.y)) {		// ignore pointers still on button
 					if (pointers.contains(pointerID)) {				// if pointer was holding button, remove
 						pointers.remove(pointerID);
 					}
-					if (pointers.isEmpty()) {
+					if (pointers.isEmpty()) {						// if no remaining pointers, reset
 						resetState();
 					}
 				}
-				
-				
 			}
 		}
 		
@@ -116,6 +115,7 @@ public class Button extends Sprite implements OnTouchListener {
 	
 	public void resetState() {
 		state = ButtonState.UP;
+		pointers.clear();
 		if (getBmp() == buttonDown) {
 			setBmp(buttonUp);
 		}
