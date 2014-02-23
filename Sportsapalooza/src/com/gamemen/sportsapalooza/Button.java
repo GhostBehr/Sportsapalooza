@@ -1,5 +1,8 @@
 package com.gamemen.sportsapalooza;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.view.MotionEvent;
@@ -11,6 +14,7 @@ public class Button extends Sprite implements OnTouchListener {
 	private Bitmap buttonUp, buttonDown;
 	private ButtonID id;
 	private ButtonState state;
+	private List<Integer> pointers;
 	
 	public enum ButtonID {
 		PLAY,
@@ -39,55 +43,73 @@ public class Button extends Sprite implements OnTouchListener {
 		this.id = ID;
 		
 		state = ButtonState.UP;
+		pointers = new ArrayList<Integer>();
 	}
 	
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		PointF touchPos = new PointF(event.getX(), event.getY());
+		int actionIndex = event.getActionIndex();
+		Integer pointerID = event.getPointerId(actionIndex);
+		PointF pointerPos = new PointF(event.getX(actionIndex), event.getY(actionIndex));
 		
-		if (getBounds().contains(touchPos.x, touchPos.y)) {
-			switch(event.getAction()) {
+		if (getBounds().contains(pointerPos.x, pointerPos.y)) {		// event in bounds
+			switch(event.getActionMasked()) {
+				case MotionEvent.ACTION_POINTER_DOWN:
 				case MotionEvent.ACTION_DOWN:
+					pointers.add(pointerID);						// add pointer to list 
+					
 					if (state == ButtonState.UP) {
 						state = ButtonState.HELD;
 						if (getBmp() == buttonUp) {
 							setBmp(buttonDown);
 						}
-						
-						System.out.println("BtnDown");
 					}
 					break;
 					
+				case MotionEvent.ACTION_POINTER_UP:
 				case MotionEvent.ACTION_UP:
 					if (state == ButtonState.HELD) {
-						state = ButtonState.TAPPED;
-						if (getBmp() == buttonDown) {
-							setBmp(buttonUp);
+						if (pointers.contains(pointerID)) {
+							pointers.remove(pointerID);
 						}
 						
-						System.out.println("BtnUp");
+						if (pointers.isEmpty()) {					// if no pointers holding a held button, it was tapped
+							state = ButtonState.TAPPED;
+							if (getBmp() == buttonDown) {
+								setBmp(buttonUp);
+							}
+						}
 					}
 					break;
 					
 				case MotionEvent.ACTION_CANCEL:
 					resetState();
-					
-					System.out.println("CancelBtn");
 					break;
 			}
 		}
 		else {		// Moved off of button while held
-			if (event.getAction() == MotionEvent.ACTION_MOVE && state == ButtonState.HELD) {
-				resetState();
+			if (event.getActionMasked() == MotionEvent.ACTION_MOVE && state == ButtonState.HELD) {	// if motion event out of bounds
+				int pointerCount = event.getPointerCount();
 				
-				System.out.println("BtnMoveAway");
+				for (int p = 0; p < pointerCount; ++p) {
+					pointerID = event.getPointerId(p);
+					
+					if (pointers.contains(pointerID)) {				// if pointer was holding button, remove
+						pointers.remove(pointerID);
+					}
+					if (pointers.isEmpty()) {
+						resetState();
+					}
+				}
+				
+				
 			}
 		}
 		
 		return true;
 	}
-	
+
 	public ButtonState getState() {
 		return state;
 	}

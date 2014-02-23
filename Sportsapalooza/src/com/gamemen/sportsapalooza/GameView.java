@@ -97,6 +97,8 @@ public class GameView extends SurfaceView {
 		
 		if (testButt.getState() == ButtonState.TAPPED) {
 			testButt.resetState();
+			
+			System.out.println("Pushed and processed the button");
 		}
 		
 		// UPDATES
