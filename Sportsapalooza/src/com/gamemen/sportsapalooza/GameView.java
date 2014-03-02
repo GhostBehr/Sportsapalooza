@@ -20,6 +20,8 @@ public class GameView extends SurfaceView {
 	private GameStates currentState;
 	private boolean initialized;
 	
+	private Game game;
+	
 	// Bitmaps
 	private Bitmap btnUp;
 	private Bitmap btnDown;
@@ -73,6 +75,8 @@ public class GameView extends SurfaceView {
 		currentState = GameStates.MAIN_MENU;
 		initialized = false;
 		loadResources();
+		
+		game = new Game(this);
 	}
 	
 	private void loadResources() {
@@ -105,7 +109,7 @@ public class GameView extends SurfaceView {
 		/////////////////////////////////////
 		
 		if (currentState == GameStates.PLAYING) {
-			// game.update()
+			game.update(deltaTime);
 		}
 	}
 	
@@ -114,6 +118,10 @@ public class GameView extends SurfaceView {
 		
 		// draw stuff
 		testButt.onDraw(canvas);
+		
+		if (getCurrentState() == GameStates.PLAYING){
+			game.onDraw(canvas);
+		}
 	}
 	
 	/////////////////////////////////////////////////////////////

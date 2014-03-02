@@ -39,7 +39,7 @@ public class Players {
 		switch(id){
 		case LEFT:
 			leftDudes--;
-		case RIGHT:
+		case RIGHT:           //I can't decide if these are better than having two separate player classes
 			rightDudes--;
 		}
 	}

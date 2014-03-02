@@ -3,6 +3,8 @@ package com.gamemen.sportsapalooza;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gamemen.sportsapalooza.Players.PlayerID;
+
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -15,7 +17,7 @@ public class Game {
 	private Sprite rightDugout;
 	private Button leftEndzone;
 	private Button rightEndzone;
-	private float endzoneOffset;
+	private float dugoutOffset;
 	private RectF bounds;
 	
 	public Game(GameView gameView) {
@@ -29,10 +31,12 @@ public class Game {
 		leftDugout = new Sprite(gameView, null, null);
 		rightDugout = new Sprite(gameView, null, null);
 		
+		dugoutOffset = 150f;
+		
 		leftEndzone = new Button(gameView, null, null, null, null);
 		rightEndzone = new Button(gameView, null, null, null, null);
 		
-		bounds.set(0, 0, 200, 200);
+		bounds.set(0, 0, gameView.getMeasuredWidth(), gameView.getMeasuredHeight());
 	}
 	
 	public void update(float deltaTime) {
@@ -41,7 +45,8 @@ public class Game {
 			dude.update(deltaTime);
 		}
 		ball.update(deltaTime);
-		//Endzone.pos = new PointF(Endzone.pos.x, ball.pos.y +/- endzoneoffset);
+		leftDugout.pos = new PointF(leftDugout.pos.x, ball.pos.y - dugoutOffset);
+		rightDugout.pos = new PointF(rightDugout.pos.x, ball.pos.y + dugoutOffset);
 	}
 	
 	public void onDraw(Canvas canvas) {
