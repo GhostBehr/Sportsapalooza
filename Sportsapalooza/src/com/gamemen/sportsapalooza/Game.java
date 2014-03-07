@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.gamemen.sportsapalooza.Players.PlayerID;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -21,15 +23,19 @@ public class Game {
 	private RectF bounds;
 	
 	public Game(GameView gameView) {
+		Bitmap dudeSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.dude);
+		Bitmap ballSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.ball);
+		Bitmap dugoutSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.dugout);
+		
 		dudes = new ArrayList<FootballPlayer>(6);
 		for (int i = 0; i < dudes.size(); i++) {
-			dudes.add(new FootballPlayer(gameView, null, new PointF(0, 0)));
+			dudes.add(new FootballPlayer(gameView, dudeSprite, new PointF(0, 0)));
 		}
 		
-		ball = new Football(gameView, null, null);
+		ball = new Football(gameView, ballSprite, new PointF(0, 0));
 		
-		leftDugout = new Sprite(gameView, null, null);
-		rightDugout = new Sprite(gameView, null, null);
+		leftDugout = new Sprite(gameView, dugoutSprite, new PointF(0, 0));
+		rightDugout = new Sprite(gameView, dugoutSprite, new PointF(0, 0));
 		
 		dugoutOffset = 150f;
 		
