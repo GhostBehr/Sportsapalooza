@@ -22,7 +22,9 @@ public class Button extends Sprite implements OnTouchListener {
 		ABOUT,
 		REPLAY,
 		MAIN_MENU,
-		PAUSE;
+		PAUSE,
+		ENDZONE,
+		DETONATOR,
 	}
 	
 	public enum ButtonState {

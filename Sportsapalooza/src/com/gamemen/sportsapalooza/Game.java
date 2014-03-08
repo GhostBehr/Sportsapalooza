@@ -3,6 +3,7 @@ package com.gamemen.sportsapalooza;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gamemen.sportsapalooza.Button.ButtonID;
 import com.gamemen.sportsapalooza.Button.ButtonState;
 import com.gamemen.sportsapalooza.Players.PlayerID;
 
@@ -19,7 +20,8 @@ public class Game {
 	private List<FootballPlayer> dudes;
 	private Football ball;
 	private Sprite leftDugout, rightDugout;
-	private Button leftEndzone, rightEndzone;
+	//private Button leftEndzone, rightEndzone;
+	private Endzone leftEndzone, rightEndzone;
 	private float dugoutOffset;
 	private RectF bounds;
 	
@@ -39,8 +41,8 @@ public class Game {
 		
 		dugoutOffset = 150f;
 		
-		leftEndzone = new Button(gameView, null, null, null, null); //No images 'cause invisible
-		rightEndzone = new Button(gameView, null, null, null, null);
+		leftEndzone = new Endzone(gameView, null, null, ButtonID.ENDZONE, null); //No images 'cause invisible
+		rightEndzone = new Endzone(gameView, null, null, ButtonID.ENDZONE, null);
 		
 		bounds.set(0, 0, gameView.getMeasuredWidth(), gameView.getMeasuredHeight());
 	}
@@ -53,7 +55,7 @@ public class Game {
 	
 	public void update(float deltaTime) {
 		//make sure bounds.contains(RectF) returns true for all the stuff?
-		for (FootballPlayer dude : dudes){
+		for (FootballPlayer dude : dudes) {
 			dude.update(deltaTime);
 		}
 		ball.update(deltaTime);
@@ -67,7 +69,7 @@ public class Game {
 			dudes.add(new FootballPlayer(gameView, dudeSprite, new PointF(0, 0), Players.getColor(PlayerID.LEFT)));
 		}
         
-		if (leftEndzone.getState() == ButtonState.TAPPED) {
+		if (rightEndzone.getState() == ButtonState.TAPPED) {
 			rightEndzone.resetState();
 			dudes.add(new FootballPlayer(gameView, dudeSprite, new PointF(0, 0), Players.getColor(PlayerID.RIGHT)));
 		}
