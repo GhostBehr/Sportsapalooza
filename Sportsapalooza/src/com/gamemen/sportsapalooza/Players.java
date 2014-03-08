@@ -26,6 +26,17 @@ public class Players {
 		}
 	}
 	
+	public static Color getColor(PlayerID id) {
+		switch(id){
+		default:
+			return null;
+		case LEFT:
+			return leftColor;
+		case RIGHT:
+			return rightColor;
+		}
+	}
+	
 	public static void score(PlayerID id) {
 		switch(id){
 		case LEFT:
