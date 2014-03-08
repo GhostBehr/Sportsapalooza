@@ -25,7 +25,7 @@ public class Game {
 	private float dugoutOffset;
 	private RectF bounds;
 	
-	Bitmap dudeSprite, dugoutSprite, ballSprite, dudeButtonUp, dudeButtonDown;
+	Bitmap dudeSprite, dugoutSprite, ballSprite;
 	
 	public Game(GameView gameView) {
 		this.gameView = gameView;
@@ -41,10 +41,10 @@ public class Game {
 		
 		dugoutOffset = 150f;
 		
-		leftEndzone = new Endzone(gameView, null, null, ButtonID.ENDZONE, null); //No images 'cause invisible
-		rightEndzone = new Endzone(gameView, null, null, ButtonID.ENDZONE, null);
+		leftEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(0, 0)); //No images 'cause invisible
+		rightEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(gameView.getMeasuredHeight() + 20, 0));
 		
-		bounds.set(0, 0, gameView.getMeasuredWidth(), gameView.getMeasuredHeight());
+		bounds = new RectF(0, 0, gameView.getMeasuredWidth(), gameView.getMeasuredHeight());
 	}
 	
 	private void loadResources() {

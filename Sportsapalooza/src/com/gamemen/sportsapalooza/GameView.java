@@ -56,11 +56,11 @@ public class GameView extends SurfaceView {
 		// GAME STUFF
 		////////////////////////////////////////////////////////
 		
-		currentState = GameStates.MAIN_MENU;
+		currentState = GameStates.PLAYING;
 		initialized = false;
 		loadResources();
 		
-//		game = new Game(this);
+		game = new Game(this);
 	}
 	
 	public void onResume() {
@@ -114,18 +114,18 @@ public class GameView extends SurfaceView {
 		/////////////////////////////////////
 		
 		if (currentState == GameStates.PLAYING) {
-//			game.update(deltaTime);
+			game.update(deltaTime);
 		}
 	}
 	
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.BLACK);
+		canvas.drawColor(Color.WHITE);
 		
 		// draw stuff
-		testButt.onDraw(canvas);
+		//testButt.onDraw(canvas);
 		
 		if (getCurrentState() == GameStates.PLAYING){
-//			game.onDraw(canvas);
+			game.onDraw(canvas);
 		}
 	}
 	
