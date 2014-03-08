@@ -40,30 +40,14 @@ public class GameView extends SurfaceView {
 	public GameView(Context context) {
 		super(context);
 		
-		gameLoop = new GameLoop(this);
-		
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
 			
 			@Override
-			public void surfaceDestroyed(SurfaceHolder holder) {
-				boolean retry = true;
-				gameLoop.setRunning(false);
-				
-				while(retry) {
-					try {
-						gameLoop.join();	// blocks thread
-						retry = false;		// until not interrupted and sets true
-					}
-					catch (InterruptedException e) { }
-				}
-			}
+			public void surfaceDestroyed(SurfaceHolder holder) { }
 			
 			@Override
-			public void surfaceCreated(SurfaceHolder holder) {
-				gameLoop.setRunning(true);
-				gameLoop.start();
-			}
+			public void surfaceCreated(SurfaceHolder holder) { }
 			
 			@Override
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
@@ -76,7 +60,28 @@ public class GameView extends SurfaceView {
 		initialized = false;
 		loadResources();
 		
-		game = new Game(this);
+//		game = new Game(this);
+	}
+	
+	public void onResume() {
+		gameLoop = new GameLoop(this);
+		gameLoop.setRunning(true);
+		gameLoop.start();
+		
+		// possibly should move loadResources or whatever to here
+	}
+	
+	public void onPause() {
+		boolean retry = true;
+		gameLoop.setRunning(false);
+		
+		while(retry) {
+			try {
+				gameLoop.join();	// blocks thread
+				retry = false;		// until not interrupted and sets true
+			}
+			catch (InterruptedException e) { }
+		}
 	}
 	
 	private void loadResources() {
@@ -109,7 +114,7 @@ public class GameView extends SurfaceView {
 		/////////////////////////////////////
 		
 		if (currentState == GameStates.PLAYING) {
-			game.update(deltaTime);
+//			game.update(deltaTime);
 		}
 	}
 	
@@ -120,7 +125,7 @@ public class GameView extends SurfaceView {
 		testButt.onDraw(canvas);
 		
 		if (getCurrentState() == GameStates.PLAYING){
-			game.onDraw(canvas);
+//			game.onDraw(canvas);
 		}
 	}
 	

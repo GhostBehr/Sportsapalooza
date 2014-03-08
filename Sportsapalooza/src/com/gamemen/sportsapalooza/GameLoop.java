@@ -10,10 +10,10 @@ public class GameLoop extends Thread {
 
 	public GameLoop(GameView view) {
 		this.view = view;
-		lastTime = System.nanoTime();
 	}
 
 	public void setRunning(boolean run) {
+		lastTime = System.nanoTime();
 		running = run;
 	}
 
@@ -34,6 +34,9 @@ public class GameLoop extends Thread {
 				synchronized (view.getHolder()) {
 					view.onDraw(c);
 				}
+			}
+			catch(Exception e) {
+				// Should something be done here?
 			}
 			finally {
 				if (c != null) {

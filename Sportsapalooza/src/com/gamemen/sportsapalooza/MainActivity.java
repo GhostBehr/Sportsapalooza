@@ -7,13 +7,17 @@ import android.view.Menu;
 import android.view.Window;
 
 public class MainActivity extends Activity {
-
+	private GameView gameView;
+	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(new GameView(this));
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        
+        gameView = new GameView(this);
+        setContentView(gameView);
     }
 
     @Override
@@ -21,6 +25,18 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+    
+    public void onResume() {
+    	super.onResume();
+    	
+    	gameView.onResume();
+    }
+    
+    public void onPause() {
+    	super.onPause();
+    	
+    	gameView.onPause();
     }
     
 }
