@@ -18,7 +18,7 @@ public class Football extends Sprite {
 	}
 	
 	public void update(float deltaTime) {
-		//pos = physics.update(deltaTime, pos);
+		pos = physics.update(deltaTime, pos);
 	}
 	
 	public void addConstForce(PointF force) {

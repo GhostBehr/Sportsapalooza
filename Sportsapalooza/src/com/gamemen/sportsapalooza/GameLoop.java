@@ -24,8 +24,11 @@ public class GameLoop extends Thread {
 			long nextTime = System.nanoTime();	// saved locally for consistency
 			float deltaTime = (float)((nextTime - lastTime) * 0.000000001);
 			lastTime = nextTime;
-
-			view.update(deltaTime);
+			
+			try {
+				view.update(deltaTime);
+			}
+			catch (Exception e) { }
 			
 			/// DRAW ///
 			Canvas c = null;
@@ -35,9 +38,7 @@ public class GameLoop extends Thread {
 					view.onDraw(c);
 				}
 			}
-			catch(Exception e) {
-				// Should something be done here?
-			}
+			catch (Exception e) { }
 			finally {
 				if (c != null) {
 					view.getHolder().unlockCanvasAndPost(c);
