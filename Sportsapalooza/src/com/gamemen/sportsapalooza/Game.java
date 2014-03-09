@@ -15,15 +15,18 @@ import android.graphics.RectF;
 
 public class Game {
 	
-	GameView gameView;
+	private GameView gameView;
 	
 	private List<FootballPlayer> dudes;
 	private Football ball;
 	private Sprite leftDugout, rightDugout;
-	//private Button leftEndzone, rightEndzone;
 	private Endzone leftEndzone, rightEndzone;
-	private float dugoutOffset;
+	
 	private RectF bounds;
+	
+	private float dugoutOffset;
+	private final float blastForce = 1.0f;
+	private final float blastRadius = 1.0f;
 	
 	Bitmap dudeSprite, dugoutSprite, ballSprite;
 	
@@ -53,10 +56,22 @@ public class Game {
 		dugoutSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.dugout);
 	}
 	
+	public void explosion(PointF dudePos) {
+		PointF direction = new PointF(dudePos.x - ball.getPosition().x, dudePos.y - ball.getPosition().y);
+		float directionMagnitude = (float)Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+		
+		PointF force = new PointF((direction.x/directionMagnitude) * blastForce, (direction.x/directionMagnitude) * blastForce);
+		
+		ball.addImpulseForce(force);
+	}
+	
 	public void update(float deltaTime) {
 		//make sure bounds.contains(RectF) returns true for all the stuff?
 		for (FootballPlayer dude : dudes) {
 			dude.update(deltaTime);
+			if (dude.isExploding()) {
+				explosion(dude.getPosition());
+			}
 		}
 		ball.update(deltaTime);
 		leftDugout.pos = new PointF(leftDugout.pos.x, ball.pos.y - dugoutOffset);

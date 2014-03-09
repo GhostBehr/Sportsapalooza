@@ -55,4 +55,8 @@ public class Sprite {
 		bounds = new RectF(pos.x, pos.y, bounds.width(), bounds.height());
 	}
 	
+	public PointF getPosition() {
+		return pos;
+	}
+	
 }
