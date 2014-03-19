@@ -11,10 +11,10 @@ import android.view.View.OnTouchListener;
 
 public class Button extends Sprite implements OnTouchListener {
 	
-	private Bitmap buttonUp, buttonDown;
-	private ButtonID id;
-	private ButtonState state;
-	private List<Integer> pointers;
+	protected Bitmap buttonUp, buttonDown;
+	protected ButtonID id;
+	protected ButtonState state;
+	protected List<Integer> pointers;
 	
 	public enum ButtonID {
 		PLAY,
@@ -47,7 +47,6 @@ public class Button extends Sprite implements OnTouchListener {
 		state = ButtonState.UP;
 		pointers = new ArrayList<Integer>();
 	}
-	
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -119,7 +118,7 @@ public class Button extends Sprite implements OnTouchListener {
 		return false;
 	}
 	
-	private void resetState() {
+	protected void resetState() {
 		state = ButtonState.UP;
 		pointers.clear();
 		if (getBmp() == buttonDown) {
