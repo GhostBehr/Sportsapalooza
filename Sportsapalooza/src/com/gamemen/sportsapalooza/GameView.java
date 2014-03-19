@@ -24,10 +24,10 @@ public class GameView extends SurfaceView {
 	// Bitmaps
 	private Options bitmapOptions;
 	
-	private Bitmap bmpField, bmpEndzone;
+	private Bitmap bmpField, bmpEndzone, bmpScoreBar;
 	
 	// Objects
-	private Sprite field, endzoneLeft, endzoneRight;
+	private Sprite field, endzoneLeft, endzoneRight, scoreBar;
 	
 	private Game game;
 	
@@ -92,14 +92,16 @@ public class GameView extends SurfaceView {
 	private void loadResources(Options opt) {
 		bmpField = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
 		bmpEndzone = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
+		bmpScoreBar = BitmapFactory.decodeResource(getResources(), R.drawable.score, opt);
 	}
 	
 	private void init() {
 		initialized = true;
 		
-		endzoneLeft = new Sprite(this, bmpEndzone);
-		field = new Sprite(this, bmpField, new PointF(bmpEndzone.getWidth(), 0));
-		endzoneRight = new Sprite(this, bmpEndzone, new PointF(bmpEndzone.getWidth() + bmpField.getWidth(), 0));
+		scoreBar = new Sprite(this, bmpScoreBar);
+		endzoneLeft = new Sprite(this, bmpEndzone, new PointF(0, bmpScoreBar.getHeight()));
+		field = new Sprite(this, bmpField, new PointF(bmpEndzone.getWidth(), bmpScoreBar.getHeight()));
+		endzoneRight = new Sprite(this, bmpEndzone, new PointF(bmpEndzone.getWidth() + bmpField.getWidth(), bmpScoreBar.getHeight()));
 	}
 	
 	protected void update(float deltaTime) {
@@ -121,6 +123,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
 		
+		scoreBar.onDraw(canvas);
 		field.onDraw(canvas);
 		endzoneLeft.onDraw(canvas);
 		endzoneRight.onDraw(canvas);
