@@ -6,6 +6,7 @@ import com.gamemen.sportsapalooza.Button.ButtonState;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -20,13 +21,15 @@ public class GameView extends SurfaceView {
 	private GameStates currentState;
 	private boolean initialized;
 	
-	private Game game;
-	
 	// Bitmaps
-	private Bitmap btnUp;
-	private Bitmap btnDown;
+	private Options bitmapOptions;
+	
+	private Bitmap bmpField, bmpEndzone;
 	
 	// Objects
+	private Sprite field, endzoneLeft, endzoneRight;
+	
+	private Game game;
 	
 	public enum GameStates {
 		MAIN_MENU,
@@ -57,7 +60,10 @@ public class GameView extends SurfaceView {
 		
 		currentState = GameStates.PLAYING;
 		initialized = false;
-		loadResources();
+		
+		bitmapOptions = new Options();
+		bitmapOptions.inScaled = false;
+		loadResources(bitmapOptions);
 		
 		game = new Game(this);
 	}
@@ -83,13 +89,17 @@ public class GameView extends SurfaceView {
 		}
 	}
 	
-	private void loadResources() {
-		btnUp = BitmapFactory.decodeResource(getResources(), R.drawable.btn_up);
-		btnDown = BitmapFactory.decodeResource(getResources(), R.drawable.btn_down);
+	private void loadResources(Options opt) {
+		bmpField = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
+		bmpEndzone = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
 	}
 	
 	private void init() {
 		initialized = true;
+		
+		endzoneLeft = new Sprite(this, bmpEndzone);
+		field = new Sprite(this, bmpField, new PointF(bmpEndzone.getWidth(), 0));
+		endzoneRight = new Sprite(this, bmpEndzone, new PointF(bmpEndzone.getWidth() + bmpField.getWidth(), 0));
 	}
 	
 	protected void update(float deltaTime) {
@@ -110,6 +120,10 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
+		
+		field.onDraw(canvas);
+		endzoneLeft.onDraw(canvas);
+		endzoneRight.onDraw(canvas);
 		
 		if (currentState == GameStates.PLAYING){
 			game.onDraw(canvas);
