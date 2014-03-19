@@ -23,21 +23,21 @@ public class ForceMotion {
 	
 	public PointF update(float deltaTime, PointF pos) {
 		PointF totalForce = new PointF(constForce.x + impulseForce.x, constForce.y + impulseForce.y);
-		impulseForce = new PointF(0, 0);
+		impulseForce.set(0, 0);
 		
 		PointF accel = new PointF(totalForce.x / mass, totalForce.y / mass);
 		PointF newPos =  new PointF(pos.x + vel.x * deltaTime + 0.5f * accel.x * deltaTime * deltaTime,
 				pos.y + vel.y * deltaTime + 0.5f * accel.y * deltaTime * deltaTime);
-		vel = new PointF(vel.x + accel.x * deltaTime, vel.y + accel.y * deltaTime);
+		vel.set(vel.x + accel.x * deltaTime, vel.y + accel.y * deltaTime);
 		
 		return newPos;
 	}
 	
 	public void addConstForce(PointF force) {
-		constForce = new PointF(constForce.x + force.x, constForce.y + force.y);
+		constForce.set(constForce.x + force.x, constForce.y + force.y);
 	}
 	
 	public void addImpulseForce(PointF force) {
-		impulseForce = new PointF(impulseForce.x + force.x, impulseForce.y + force.y);
+		impulseForce.set(impulseForce.x + force.x, impulseForce.y + force.y);
 	}
 }

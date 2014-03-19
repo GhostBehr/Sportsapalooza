@@ -79,13 +79,11 @@ public class Game {
 	}
 	
 	public void onDraw(Canvas canvas) {
-		if (leftEndzone.getState() == ButtonState.TAPPED) {
-			leftEndzone.resetState();
+		if (leftEndzone.isPressed()) {
 			dudes.add(new FootballPlayer(gameView, dudeSprite, new PointF(0, 0), Players.getColor(PlayerID.LEFT)));
 		}
         
-		if (rightEndzone.getState() == ButtonState.TAPPED) {
-			rightEndzone.resetState();
+		if (rightEndzone.isPressed()) {
 			dudes.add(new FootballPlayer(gameView, dudeSprite, new PointF(0, 0), Players.getColor(PlayerID.RIGHT)));
 		}
 		

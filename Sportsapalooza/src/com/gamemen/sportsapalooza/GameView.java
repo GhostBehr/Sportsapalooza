@@ -27,7 +27,6 @@ public class GameView extends SurfaceView {
 	private Bitmap btnDown;
 	
 	// Objects
-	private Button testButt;
 	
 	public enum GameStates {
 		MAIN_MENU,
@@ -90,9 +89,6 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void init() {
-		testButt = new Button(this, btnUp, btnDown, ButtonID.PLAY, new PointF(10, 10), 0);
-		this.setOnTouchListener(testButt);
-		
 		initialized = true;
 	}
 	
@@ -103,12 +99,6 @@ public class GameView extends SurfaceView {
 		
 		// BUTTONS
 		/////////////////////////////////////
-		
-		if (testButt.getState() == ButtonState.TAPPED) {
-			testButt.resetState();
-			
-			System.out.println("Pushed and processed the button");
-		}
 		
 		// UPDATES
 		/////////////////////////////////////
@@ -121,10 +111,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
 		
-		// draw stuff
-		//testButt.onDraw(canvas);
-		
-		if (getCurrentState() == GameStates.PLAYING){
+		if (currentState == GameStates.PLAYING){
 			game.onDraw(canvas);
 		}
 	}

@@ -95,7 +95,7 @@ public class Button extends Sprite implements OnTouchListener {
 			
 			for (int p = 0; p < pointerCount; ++p) {				// for each ACTION_MOVE pointer
 				pointerID = event.getPointerId(p);
-				pointerPos = new PointF(event.getX(p), event.getY(p));
+				pointerPos.set(event.getX(p), event.getY(p));
 
 				if (!getBounds().contains(pointerPos.x, pointerPos.y)) {		// ignore pointers still on button
 					if (pointers.contains(pointerID)) {				// if pointer was holding button, remove
@@ -111,11 +111,15 @@ public class Button extends Sprite implements OnTouchListener {
 		return true;
 	}
 
-	public ButtonState getState() {
-		return state;
+	public boolean isPressed() {
+		if (state == ButtonState.TAPPED) {
+			resetState();
+			return true;
+		}
+		return false;
 	}
 	
-	public void resetState() {
+	private void resetState() {
 		state = ButtonState.UP;
 		pointers.clear();
 		if (getBmp() == buttonDown) {
