@@ -10,6 +10,8 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,6 +22,9 @@ public class GameView extends SurfaceView {
 	
 	private GameStates currentState;
 	private boolean initialized;
+	
+	public static PointF SCREEN_SIZE;
+	private DisplayMetrics metrics;
 	
 	// Bitmaps
 	private Options bitmapOptions;
@@ -55,6 +60,9 @@ public class GameView extends SurfaceView {
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
 		});
 		
+		SCREEN_SIZE = new PointF(800, 480);
+		metrics = getResources().getDisplayMetrics();
+		
 		// GAME STUFF
 		////////////////////////////////////////////////////////
 		
@@ -62,7 +70,7 @@ public class GameView extends SurfaceView {
 		initialized = false;
 		
 		bitmapOptions = new Options();
-		bitmapOptions.inScaled = false;
+		bitmapOptions.inDensity = metrics.densityDpi;
 		loadResources(bitmapOptions);
 		
 		game = new Game(this);
@@ -99,9 +107,9 @@ public class GameView extends SurfaceView {
 		initialized = true;
 		
 		scoreBar = new Sprite(this, bmpScoreBar);
-		endzoneLeft = new Sprite(this, bmpEndzone, new PointF(0, bmpScoreBar.getHeight()));
-		field = new Sprite(this, bmpField, new PointF(bmpEndzone.getWidth(), bmpScoreBar.getHeight()));
-		endzoneRight = new Sprite(this, bmpEndzone, new PointF(bmpEndzone.getWidth() + bmpField.getWidth(), bmpScoreBar.getHeight()));
+		endzoneLeft = new Sprite(this, bmpEndzone, new PointF(0, 40));
+		field = new Sprite(this, bmpField, new PointF(100, 40));
+		endzoneRight = new Sprite(this, bmpEndzone, new PointF(700, 40));
 	}
 	
 	protected void update(float deltaTime) {
@@ -122,6 +130,7 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
+		canvas.scale(metrics.widthPixels / SCREEN_SIZE.x, metrics.heightPixels / SCREEN_SIZE.y);
 		
 		scoreBar.onDraw(canvas);
 		field.onDraw(canvas);

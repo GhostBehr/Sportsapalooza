@@ -15,6 +15,7 @@ public class Button extends Sprite implements OnTouchListener {
 	protected ButtonID id;
 	protected ButtonState state;
 	protected List<Integer> pointers;
+	public PointF pointerLoc;
 	
 	public enum ButtonID {
 		PLAY,
@@ -24,7 +25,7 @@ public class Button extends Sprite implements OnTouchListener {
 		MAIN_MENU,
 		PAUSE,
 		ENDZONE,
-		DETONATOR,
+		DETONATOR
 	}
 	
 	public enum ButtonState {
@@ -46,6 +47,7 @@ public class Button extends Sprite implements OnTouchListener {
 		
 		state = ButtonState.UP;
 		pointers = new ArrayList<Integer>();
+		pointerLoc = new PointF(-1, -1);
 	}
 	
 	@Override
@@ -77,6 +79,7 @@ public class Button extends Sprite implements OnTouchListener {
 						
 						if (pointers.isEmpty()) {					// if no pointers holding a held button, it was tapped
 							state = ButtonState.TAPPED;
+							pointerLoc.set(pointerPos.x, pointerPos.y);
 							if (getBmp() == buttonDown) {
 								setBmp(buttonUp);
 							}
@@ -121,6 +124,7 @@ public class Button extends Sprite implements OnTouchListener {
 	protected void resetState() {
 		state = ButtonState.UP;
 		pointers.clear();
+		pointerLoc.set(-1, -1);
 		if (getBmp() == buttonDown) {
 			setBmp(buttonUp);
 		}

@@ -29,12 +29,10 @@ public class Game {
 		
 		loadResources();
 		
-		ball = new Football(gameView, ballSprite, new PointF(gameView.getMeasuredWidth()/2, gameView.getMeasuredHeight()/2));
+		ball = new Football(gameView, ballSprite, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2));
 		
-		leftEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(0, 0), leftDudeSprite, ball); //No images 'cause invisible
-		rightEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(gameView.getMeasuredHeight() + 20, 0), rightDudeSprite, ball);
-		
-		bounds = new RectF(0, 0, gameView.getMeasuredWidth(), gameView.getMeasuredHeight());
+//		leftEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(0, 0), leftDudeSprite, ball); //No images 'cause invisible
+//		rightEndzone = new Endzone(gameView, dugoutSprite, dugoutSprite, ButtonID.ENDZONE, new PointF(gameView.getMeasuredHeight() + 20, 0), rightDudeSprite, ball);
 	}
 	
 	private void loadResources() {
