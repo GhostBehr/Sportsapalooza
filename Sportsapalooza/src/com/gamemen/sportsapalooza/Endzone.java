@@ -18,12 +18,16 @@ public class Endzone extends Button {
 	private int dudesAvailable = 3;
 	private List<FootballPlayer> dudes;
 	
+	private List<Sprite> explosions;
+	private List<Float> explosionDurations;
+	
 	private Football ball;
 	private Sprite dugout;
 	
 	private final float blastForce = 100000f;
 	private final float blastRadius = 1.0f;
 	private final float dugoutOffset = 150f;
+	private final float explosionDuration = 0.5f;
 
 	private int score = 0;
 	
@@ -33,6 +37,8 @@ public class Endzone extends Button {
 		this.isLeftSide = isLeftSide;
 		this.ball = ball;
 		dudes = new ArrayList<FootballPlayer>(3);
+		explosions = new ArrayList<Sprite>(3);
+		explosionDurations = new ArrayList<Float>(3);
 		
 		PointF dugoutPos;
 		if (isLeftSide) {
@@ -53,7 +59,7 @@ public class Endzone extends Button {
 	}
 	
 	public void explosion(FootballPlayer dude) {
-		//place explosion at dude.pos
+		explosions.add(new Sprite(gameView, BitmapLoader.bmpExplosion, dude.pos));
 		PointF direction = new PointF(ball.pos.x - dude.pos.x, ball.pos.y - dude.pos.y);
 		float magnitude = direction.length();
 		if(magnitude <= 1){
@@ -63,6 +69,16 @@ public class Endzone extends Button {
 	}
 	
 	public void update(float deltaTime) {
+		for(int i = 0; i < explosionDurations.size(); ++i) {
+			Float duration = explosionDurations.get(i);
+			duration -= deltaTime;
+			if (duration <= 0) {
+				explosionDurations.remove(duration);
+				explosions.remove(i);
+			}
+			++i;
+		}
+		
 		if(this.isPressed()) {
 			for (int i = 0; i < dudes.size(); i++) {
 				if (dudes.get(i).detonator.getBounds().contains(pointerLoc.x, pointerLoc.y)){
@@ -84,6 +100,10 @@ public class Endzone extends Button {
 	
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		
+		for(Sprite explosion : explosions) {
+			explosion.onDraw(canvas);
+		}
 		
 		for (FootballPlayer dude : dudes) {
 			dude.onDraw(canvas);

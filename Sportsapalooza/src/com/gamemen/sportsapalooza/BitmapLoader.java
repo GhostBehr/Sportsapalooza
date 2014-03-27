@@ -9,7 +9,7 @@ import android.util.DisplayMetrics;
 public class BitmapLoader {
 	private static Options bitmapOptions;
 	
-	public static Bitmap bmpField, bmpEndzone, bmpScoreBar, bmpLeftDude, bmpRightDude, bmpFootball, bmpDugout, bmpDetonatorUp, bmpDetonatorDown;
+	public static Bitmap bmpField, bmpEndzone, bmpScoreBar, bmpLeftDude, bmpRightDude, bmpFootball, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
 	
 	static void loadResources(DisplayMetrics metrics, Resources res) {
 		bitmapOptions = new Options();
@@ -31,5 +31,8 @@ public class BitmapLoader {
 		
 		// Football
 		bmpFootball = BitmapFactory.decodeResource(res, R.drawable.ball, bitmapOptions);
+		
+		// Explosion
+		bmpExplosion = BitmapFactory.decodeResource(res, R.drawable.explosion, bitmapOptions);
 	}
 }

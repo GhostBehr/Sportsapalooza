@@ -25,12 +25,6 @@ public class FootballPlayer extends Sprite {
 	}
 	
 	public void update(float deltaTime) {
-		if (detonator.isPressed()) {
-			//splode
-			//shit i guess we need explosion sprites
-			System.out.println("SPLOJUN");
-		}
-		
 		pos = motion.update(deltaTime, pos);
 	}
 }
