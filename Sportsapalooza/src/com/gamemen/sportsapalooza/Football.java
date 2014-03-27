@@ -10,7 +10,7 @@ public class Football extends Sprite {
 	private ForceMotion physics;
 	
 	public Football(GameView gameView, PointF pos) {
-		super(gameView, GameView.bmpFootball, pos);
+		super(gameView, BitmapLoader.bmpFootball, pos);
 	}
 	
 	public void onDraw(Canvas canvas) {

@@ -1,6 +1,5 @@
 package com.gamemen.sportsapalooza;
 
-import com.gamemen.sportsapalooza.Button.ButtonID;
 import com.gamemen.sportsapalooza.Button.ButtonState;
 
 import android.content.Context;
@@ -25,11 +24,6 @@ public class GameView extends SurfaceView {
 	
 	public static PointF SCREEN_SIZE;
 	private DisplayMetrics metrics;
-	
-	// Bitmaps
-	private Options bitmapOptions;
-	
-	public static Bitmap bmpField, bmpEndzone, bmpScoreBar, bmpLeftDude, bmpRightDude, bmpFootball;
 	
 	// Objects
 	private Sprite field, scoreBar;
@@ -69,9 +63,7 @@ public class GameView extends SurfaceView {
 		currentState = GameStates.PLAYING;
 		initialized = false;
 		
-		bitmapOptions = new Options();
-		bitmapOptions.inDensity = metrics.densityDpi;
-		loadResources(bitmapOptions);
+		BitmapLoader.loadResources(metrics, getResources());
 		
 		game = new Game(this);
 	}
@@ -97,25 +89,11 @@ public class GameView extends SurfaceView {
 		}
 	}
 	
-	private void loadResources(Options opt) {
-		// GameView
-		bmpField = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
-		bmpScoreBar = BitmapFactory.decodeResource(getResources(), R.drawable.score, opt);
-		
-		// Endzone
-		bmpEndzone = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
-		bmpLeftDude = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
-		bmpRightDude = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
-		
-		// Football
-		bmpFootball = BitmapFactory.decodeResource(getResources(), R.drawable.score, opt);
-	}
-	
 	private void init() {
 		initialized = true;
 		
-		scoreBar = new Sprite(this, bmpScoreBar);
-		field = new Sprite(this, bmpField, new PointF(100, 40));
+		scoreBar = new Sprite(this, BitmapLoader.bmpScoreBar);
+		field = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
 	}
 	
 	protected void update(float deltaTime) {

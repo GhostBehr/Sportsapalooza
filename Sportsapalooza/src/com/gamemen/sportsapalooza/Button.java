@@ -12,21 +12,9 @@ import android.view.View.OnTouchListener;
 public class Button extends Sprite implements OnTouchListener {
 	
 	private Bitmap buttonUp, buttonDown;
-	private ButtonID id;
 	private ButtonState state;
 	private List<Integer> pointers;
 	protected PointF pointerLoc;
-	
-	public enum ButtonID {
-		PLAY,
-		SOUND,
-		ABOUT,
-		REPLAY,
-		MAIN_MENU,
-		PAUSE,
-		ENDZONE,
-		DETONATOR
-	}
 	
 	public enum ButtonState {
 		UP,
@@ -34,20 +22,19 @@ public class Button extends Sprite implements OnTouchListener {
 		TAPPED
 	}
 	
-	public Button(GameView gameView, Bitmap buttonUp, ButtonID ID, PointF pos) {
-		this(gameView, buttonUp, buttonUp, ID, pos, 0);
+	public Button(GameView gameView, Bitmap buttonUp, PointF pos) {
+		this(gameView, buttonUp, buttonUp, pos, 0);
 	}
 	
-	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, ButtonID ID, PointF pos) {
-		this(gameView, buttonUp, buttonDown, ID, pos, 0);
+	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos) {
+		this(gameView, buttonUp, buttonDown, pos, 0);
 	}
 	
-	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, ButtonID ID, PointF pos, float rot) {
+	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos, float rot) {
 		super(gameView, buttonUp, pos, rot);
 		
 		this.buttonUp = buttonUp;
 		this.buttonDown = buttonDown;
-		this.id = ID;
 		
 		state = ButtonState.UP;
 		pointers = new ArrayList<Integer>();

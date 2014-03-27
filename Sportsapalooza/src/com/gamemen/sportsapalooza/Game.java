@@ -1,7 +1,5 @@
 package com.gamemen.sportsapalooza;
 
-import com.gamemen.sportsapalooza.Button.ButtonID;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -36,15 +34,13 @@ public class Game {
 		
 		ball = new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2));
 		
-		leftEndzone = new Endzone(gameView, endzoneSprite, ButtonID.ENDZONE, new PointF(0, 40), leftDudeSprite, ball); //No images 'cause invisible
-		rightEndzone = new Endzone(gameView, endzoneSprite, ButtonID.ENDZONE, new PointF(700, 40), rightDudeSprite, ball);
+		leftEndzone = new Endzone(gameView, true, new PointF(0, 40), ball);
+		rightEndzone = new Endzone(gameView, false, new PointF(700, 40), ball);
 		
 		currentState = PlayStates.TEE_OFF;
 	}
 	
 	public void update(float deltaTime) {
-		System.out.println(currentState + "; " + gameTime);
-		
 		switch(currentState) {
 			case TEE_OFF:
 				animTime += deltaTime;

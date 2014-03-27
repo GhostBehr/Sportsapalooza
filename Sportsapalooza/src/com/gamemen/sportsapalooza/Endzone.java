@@ -13,13 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class Endzone extends Button {
+	private boolean isLeftSide;
 	private int dudesAvailable = 3;
-
-	private Bitmap dudeSprite;
-	private Bitmap dugoutSprite;
-	private Bitmap detonatorUpSprite;
-	private Bitmap detonatorDownSprite;
-	
 	private List<FootballPlayer> dudes;
 	
 	private Football ball;
@@ -31,23 +26,14 @@ public class Endzone extends Button {
 
 	private int score = 0;
 	
-	public Endzone(GameView gameView, Bitmap buttonUp, ButtonID ID, PointF pos, Bitmap dudeSprite, Football ball) {
-		super(gameView, buttonUp, ID, pos);
+	public Endzone(GameView gameView, boolean isLeftSide, PointF pos, Football ball) {
+		super(gameView, BitmapLoader.bmpEndzone, pos);
 		
-		LoadResources();
-		
-		this.dudeSprite = dudeSprite;
-		
+		this.isLeftSide = isLeftSide;
 		this.ball = ball;
 		dudes = new ArrayList<FootballPlayer>(3);
 		
-		dugout = new Sprite(gameView, dugoutSprite, new PointF(gameView.getMeasuredHeight() + dugoutSprite.getHeight(), 0));
-	}
-	
-	private void LoadResources() {
-		detonatorUpSprite =  BitmapFactory.decodeResource(gameView.getResources(), R.drawable.detonator_up);
-		detonatorDownSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.detonator_down);
-		dugoutSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.dugout);
+		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, new PointF(10, 10));
 	}
 	
 	public int getScore() {
@@ -74,15 +60,17 @@ public class Endzone extends Button {
 				--dudesAvailable;
 				dudes.add(new FootballPlayer(
 						gameView,
-						dudeSprite,
+						isLeftSide,
 						new PointF(pointerLoc.x, pointerLoc.y + dugoutOffset),
-						new Button(gameView, detonatorUpSprite, detonatorDownSprite, ButtonID.DETONATOR, pointerLoc)));
+						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, pointerLoc)));
 			}
 			
 		}
 	}
 	
 	public void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		
 		for (FootballPlayer dude : dudes) {
 			dude.onDraw(canvas);
 		}

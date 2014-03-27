@@ -1,6 +1,5 @@
 package com.gamemen.sportsapalooza;
 
-import com.gamemen.sportsapalooza.Button.ButtonID;
 import com.gamemen.sportsapalooza.Button.ButtonState;
 
 import android.graphics.Bitmap;
@@ -14,8 +13,8 @@ public class FootballPlayer extends Sprite {
 	
 	public Button detonator;
 	
-	public FootballPlayer(GameView gameView, Bitmap bmp, PointF pos, Button detonator) {
-		super(gameView, bmp, pos);
+	public FootballPlayer(GameView gameView, boolean leftSide, PointF pos, Button detonator) {
+		super(gameView, leftSide ? BitmapLoader.bmpLeftDude : BitmapLoader.bmpRightDude, pos);
 		this.detonator = detonator;
 	}
 	
