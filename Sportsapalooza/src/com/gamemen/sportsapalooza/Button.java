@@ -11,11 +11,11 @@ import android.view.View.OnTouchListener;
 
 public class Button extends Sprite implements OnTouchListener {
 	
-	protected Bitmap buttonUp, buttonDown;
-	protected ButtonID id;
-	protected ButtonState state;
-	protected List<Integer> pointers;
-	public PointF pointerLoc;
+	private Bitmap buttonUp, buttonDown;
+	private ButtonID id;
+	private ButtonState state;
+	private List<Integer> pointers;
+	protected PointF pointerLoc;
 	
 	public enum ButtonID {
 		PLAY,
@@ -32,6 +32,10 @@ public class Button extends Sprite implements OnTouchListener {
 		UP,
 		HELD,
 		TAPPED
+	}
+	
+	public Button(GameView gameView, Bitmap buttonUp, ButtonID ID, PointF pos) {
+		this(gameView, buttonUp, buttonUp, ID, pos, 0);
 	}
 	
 	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, ButtonID ID, PointF pos) {

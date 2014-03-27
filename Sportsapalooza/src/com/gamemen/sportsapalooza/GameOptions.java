@@ -16,19 +16,19 @@ public class GameOptions {
 	}
 	
 	public enum TimeLimits {
-		ONE_MIN(1, "1:00"),
-		TWO_MIN(2, "2:00"),
-		FIVE_MIN(5, "5:00");
+		ONE_MIN(60, "1:00"),
+		TWO_MIN(120, "2:00"),
+		FIVE_MIN(300, "5:00");
 		
-		private int time;
+		private float time;
 		private String timeStr;
 		
-		TimeLimits(int time, String timeStr) {
+		TimeLimits(float time, String timeStr) {
 			this.time = time;
 			this.timeStr = timeStr;
 		}
 		
-		public int getTime() {
+		public float getTime() {
 			return time;
 		}
 		public String getTimeStr() {

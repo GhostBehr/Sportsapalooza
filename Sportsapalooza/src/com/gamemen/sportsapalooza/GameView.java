@@ -29,10 +29,10 @@ public class GameView extends SurfaceView {
 	// Bitmaps
 	private Options bitmapOptions;
 	
-	private Bitmap bmpField, bmpEndzone, bmpScoreBar;
+	public static Bitmap bmpField, bmpEndzone, bmpScoreBar, bmpLeftDude, bmpRightDude, bmpFootball;
 	
 	// Objects
-	private Sprite field, endzoneLeft, endzoneRight, scoreBar;
+	private Sprite field, scoreBar;
 	
 	private Game game;
 	
@@ -98,18 +98,24 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void loadResources(Options opt) {
+		// GameView
 		bmpField = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
-		bmpEndzone = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
 		bmpScoreBar = BitmapFactory.decodeResource(getResources(), R.drawable.score, opt);
+		
+		// Endzone
+		bmpEndzone = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
+		bmpLeftDude = BitmapFactory.decodeResource(getResources(), R.drawable.field, opt);
+		bmpRightDude = BitmapFactory.decodeResource(getResources(), R.drawable.endzone, opt);
+		
+		// Football
+		bmpFootball = BitmapFactory.decodeResource(getResources(), R.drawable.score, opt);
 	}
 	
 	private void init() {
 		initialized = true;
 		
 		scoreBar = new Sprite(this, bmpScoreBar);
-		endzoneLeft = new Sprite(this, bmpEndzone, new PointF(0, 40));
 		field = new Sprite(this, bmpField, new PointF(100, 40));
-		endzoneRight = new Sprite(this, bmpEndzone, new PointF(700, 40));
 	}
 	
 	protected void update(float deltaTime) {
@@ -134,12 +140,16 @@ public class GameView extends SurfaceView {
 		
 		scoreBar.onDraw(canvas);
 		field.onDraw(canvas);
-		endzoneLeft.onDraw(canvas);
-		endzoneRight.onDraw(canvas);
 		
 		if (currentState == GameStates.PLAYING){
 			game.onDraw(canvas);
 		}
+	}
+	
+	public void gameOver(int leftScore, int rightScore) {
+		this.currentState = GameStates.GAMEOVER;
+		
+		// Pass Game Over screen the score values
 	}
 	
 	/////////////////////////////////////////////////////////////

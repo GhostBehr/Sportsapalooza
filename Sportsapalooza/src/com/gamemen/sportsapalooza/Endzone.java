@@ -30,8 +30,8 @@ public class Endzone extends Button {
 
 	private int score = 0;
 	
-	public Endzone(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, ButtonID ID, PointF pos, Bitmap dudeSprite, Football ball) {
-		super(gameView, buttonUp, buttonDown, ID, pos);
+	public Endzone(GameView gameView, Bitmap buttonUp, ButtonID ID, PointF pos, Bitmap dudeSprite, Football ball) {
+		super(gameView, buttonUp, ID, pos);
 		
 		LoadResources();
 		
