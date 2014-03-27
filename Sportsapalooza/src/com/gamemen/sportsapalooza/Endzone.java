@@ -17,9 +17,10 @@ public class Endzone extends Button {
 
 	private Bitmap dudeSprite;
 	private Bitmap dugoutSprite;
+	private Bitmap detonatorUpSprite;
+	private Bitmap detonatorDownSprite;
 	
-	private List<FootballPlayer> dudeList;
-	private List<Button> detonators;
+	private List<FootballPlayer> dudes;
 	
 	private Football ball;
 	private Sprite dugout;
@@ -38,13 +39,14 @@ public class Endzone extends Button {
 		this.dudeSprite = dudeSprite;
 		
 		this.ball = ball;
-		detonators = new ArrayList<Button>(3);
-		dudeList = new ArrayList<FootballPlayer>(3);
+		dudes = new ArrayList<FootballPlayer>(3);
 		
 		dugout = new Sprite(gameView, dugoutSprite, new PointF(gameView.getMeasuredHeight() + dugoutSprite.getHeight(), 0));
 	}
 	
 	private void LoadResources() {
+		detonatorUpSprite =  BitmapFactory.decodeResource(gameView.getResources(), R.drawable.detonator_up);
+		detonatorDownSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.detonator_down);
 		dugoutSprite = BitmapFactory.decodeResource(gameView.getResources(), R.drawable.dugout);
 	}
 	
@@ -56,18 +58,33 @@ public class Endzone extends Button {
 		score += 1;
 	}
 	
+	public void explosion(FootballPlayer dude) {
+		
+	}
+	
 	public void update(float deltaTime) {
 		if(this.isPressed()) {
+			for (int i = 0; i < dudes.size(); i++) {
+				if (dudes.get(i).detonator.getBounds().contains(pointerLoc.x, pointerLoc.y)){
+					explosion(dudes.get(i));
+					return;
+				}
+			}
+			if(dudesAvailable > 0){
+				--dudesAvailable;
+				dudes.add(new FootballPlayer(
+						gameView,
+						dudeSprite,
+						new PointF(pointerLoc.x, pointerLoc.y + dugoutOffset),
+						new Button(gameView, detonatorUpSprite, detonatorDownSprite, ButtonID.DETONATOR, pointerLoc)));
+			}
 			
 		}
 	}
 	
 	public void onDraw(Canvas canvas) {
-		for (FootballPlayer dude : dudeList) {
+		for (FootballPlayer dude : dudes) {
 			dude.onDraw(canvas);
-		}
-		for (Button butt : detonators) {
-			butt.onDraw(canvas);
 		}
 		dugout.onDraw(canvas);
 	}
