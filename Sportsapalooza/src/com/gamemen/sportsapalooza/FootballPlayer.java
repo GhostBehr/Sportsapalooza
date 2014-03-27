@@ -16,10 +16,7 @@ public class FootballPlayer extends Sprite {
 	public FootballPlayer(GameView gameView, boolean leftSide, PointF pos, Button detonator) {
 		super(gameView, leftSide ? BitmapLoader.bmpLeftDude : BitmapLoader.bmpRightDude, pos);
 		this.detonator = detonator;
-	}
-	
-	public void explode() {
-		
+		motion = new SimpleMotion(new PointF(1, 0));
 	}
 	
 	public void onDraw(Canvas canvas) {

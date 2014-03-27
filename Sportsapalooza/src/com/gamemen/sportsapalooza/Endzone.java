@@ -14,13 +14,14 @@ import android.view.View;
 
 public class Endzone extends Button {
 	private boolean isLeftSide;
+	
 	private int dudesAvailable = 3;
 	private List<FootballPlayer> dudes;
 	
 	private Football ball;
 	private Sprite dugout;
 	
-	private final float blastForce = 1.0f;
+	private final float blastForce = 100000f;
 	private final float blastRadius = 1.0f;
 	private final float dugoutOffset = 150f;
 
@@ -33,7 +34,14 @@ public class Endzone extends Button {
 		this.ball = ball;
 		dudes = new ArrayList<FootballPlayer>(3);
 		
-		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, new PointF(10, 10));
+		PointF dugoutPos;
+		if (isLeftSide) {
+			dugoutPos = new PointF(dugoutOffset, gameView.SCREEN_SIZE.y/2);
+		} else {
+			dugoutPos = new PointF(pos.x - dugoutOffset, gameView.SCREEN_SIZE.y/2);			
+		}
+		
+		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, dugoutPos);
 	}
 	
 	public int getScore() {
@@ -45,7 +53,13 @@ public class Endzone extends Button {
 	}
 	
 	public void explosion(FootballPlayer dude) {
-		
+		//place explosion at dude.pos
+		PointF direction = new PointF(ball.pos.x - dude.pos.x, ball.pos.y - dude.pos.y);
+		float magnitude = direction.length();
+		if(magnitude <= 1){
+			direction.set(direction.x/magnitude * blastForce, direction.y/magnitude * blastForce);
+			ball.addImpulseForce(direction);
+		}
 	}
 	
 	public void update(float deltaTime) {
@@ -53,6 +67,7 @@ public class Endzone extends Button {
 			for (int i = 0; i < dudes.size(); i++) {
 				if (dudes.get(i).detonator.getBounds().contains(pointerLoc.x, pointerLoc.y)){
 					explosion(dudes.get(i));
+					dudes.remove(i);
 					return;
 				}
 			}
@@ -64,7 +79,6 @@ public class Endzone extends Button {
 						new PointF(pointerLoc.x, pointerLoc.y + dugoutOffset),
 						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, pointerLoc)));
 			}
-			
 		}
 	}
 	
