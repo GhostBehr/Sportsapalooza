@@ -39,6 +39,7 @@ public class Button extends Sprite implements OnTouchListener {
 		state = ButtonState.UP;
 		pointers = new ArrayList<Integer>();
 		pointerLoc = new PointF(-1, -1);
+		gameView.addOnTouchListener(this);
 	}
 	
 	@Override
@@ -46,6 +47,7 @@ public class Button extends Sprite implements OnTouchListener {
 		int actionIndex = event.getActionIndex();
 		Integer pointerID = event.getPointerId(actionIndex);
 		PointF pointerPos = new PointF(event.getX(actionIndex), event.getY(actionIndex));
+		pointerPos = gameView.worldPointToLocal(pointerPos);
 		
 		if (getBounds().contains(pointerPos.x, pointerPos.y)) {		// event in bounds
 			switch(event.getActionMasked()) {

@@ -8,6 +8,7 @@ import com.gamemen.sportsapalooza.Button.ButtonState;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,7 +80,8 @@ public class Endzone extends Button {
 			++i;
 		}
 		
-		if(this.isPressed()) {
+		if(isPressed()) {
+			System.out.println("ENDZUN");
 			for (int i = 0; i < dudes.size(); i++) {
 				if (dudes.get(i).detonator.getBounds().contains(pointerLoc.x, pointerLoc.y)){
 					explosion(dudes.get(i));
@@ -104,6 +106,10 @@ public class Endzone extends Button {
 	
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		
+		Paint paint = new Paint();
+		paint.setARGB(255, 255, 0, 0);
+		canvas.drawRect(getBounds(), paint);
 		
 		for(Sprite explosion : explosions) {
 			explosion.onDraw(canvas);
