@@ -77,12 +77,17 @@ public class Endzone extends Button {
 			}
 		}
 		
+		for(FootballPlayer dude : dudes) {
+			dude.update(deltaTime);
+		}
+		
 		if(isPressed()) {
 			for (FootballPlayer dude : dudes) {
 				if (dude.detonator.isPressed()){
 					explosion(dude);
 					dudes.remove(dude);
 					dudesAvailable++;
+					return;
 				}
 			}
 			
@@ -95,10 +100,6 @@ public class Endzone extends Button {
 						new PointF(dugout.pos.x, pointerLoc.y),
 						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, pointerLoc)));
 			}
-		}
-		
-		for(FootballPlayer dude : dudes) {
-			dude.update(deltaTime);
 		}
 	}
 	
