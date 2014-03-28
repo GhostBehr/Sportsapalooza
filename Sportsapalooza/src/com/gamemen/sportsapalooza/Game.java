@@ -1,7 +1,5 @@
 package com.gamemen.sportsapalooza;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -19,6 +17,7 @@ public class Game {
 	
 	private GameView gameView;
 	private RectF bounds;
+	Paint paint;
 	
 	private PlayStates currentState;
 	private final float TEE_TIME = 3;
@@ -34,6 +33,9 @@ public class Game {
 		GameOptions.setTimeLimit(GameOptions.TimeLimits.ONE_MIN);
 		
 		bounds = new RectF(0, 40, 800, 480);
+		paint = new Paint();
+		paint.setARGB(255, 255, 255, 255);
+		paint.setTextSize(25);
 		
 		ball = new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2));
 		leftEndzone = new Endzone(gameView, true, new PointF(0, 40), ball);
@@ -103,6 +105,8 @@ public class Game {
 				
 			case SCORED:
 				ball.pos.set(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2);
+				ball.stop();
+				
 				animTime += deltaTime;
 				
 				if (animTime >= SCORE_TIME) {
@@ -128,9 +132,8 @@ public class Game {
 		rightEndzone.onDraw(canvas);
 		ball.onDraw(canvas);
 		
-//		Paint paint = new Paint();
-//		paint.setARGB(255, 255, 0, 0);
-//		canvas.drawRect(ball.getBounds(), paint);
+		canvas.drawText(leftEndzone.getScore() + Endzone.strScoreTypes[leftEndzone.getScoreType()], 20, 30, paint);
+		canvas.drawText(rightEndzone.getScore() + Endzone.strScoreTypes[rightEndzone.getScoreType()], GameView.SCREEN_SIZE.x - 200, 30, paint);
 		
 		switch(currentState) {
 			case TEE_OFF:

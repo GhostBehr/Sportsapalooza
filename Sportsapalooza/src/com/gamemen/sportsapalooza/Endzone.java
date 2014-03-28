@@ -2,19 +2,16 @@ package com.gamemen.sportsapalooza;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import com.gamemen.sportsapalooza.Button.ButtonState;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PointF;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class Endzone extends Button {
 	private boolean isLeftSide;
+	
+	public static final String strScoreTypes[] = {" Touchhomes!", " Rundowns!", " Slamputts!", " Hole-in-Salchows!", " 7-10 Aces!", " Field Birdies!"};
+	private int scoreType;
 	
 	private int dudesAvailable = 3;
 	private List<FootballPlayer> dudes;
@@ -33,6 +30,9 @@ public class Endzone extends Button {
 	
 	public Endzone(GameView gameView, boolean isLeftSide, PointF pos, Football ball) {
 		super(gameView, BitmapLoader.bmpEndzone, pos);
+		
+		Random rand = new Random();
+		this.scoreType = rand.nextInt(Endzone.strScoreTypes.length);
 		
 		this.isLeftSide = isLeftSide;
 		this.ball = ball;
@@ -120,4 +120,9 @@ public class Endzone extends Button {
 		dugout.onDraw(canvas);
 		
 	}
+	
+	public int getScoreType() {
+		return scoreType;
+	}
+	
 }

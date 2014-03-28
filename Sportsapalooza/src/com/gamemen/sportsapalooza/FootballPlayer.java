@@ -1,10 +1,6 @@
 package com.gamemen.sportsapalooza;
 
-import com.gamemen.sportsapalooza.Button.ButtonState;
-
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PointF;
 
 public class FootballPlayer extends Sprite {

@@ -24,4 +24,8 @@ public class SimpleMotion {
 		speed.set(speed.x * (alongX ? -1 : 1), speed.y * (alongY ? -1 : 1));
 	}
 	
+	public void stop() {
+		speed.set(0, 0);
+	}
+	
 }

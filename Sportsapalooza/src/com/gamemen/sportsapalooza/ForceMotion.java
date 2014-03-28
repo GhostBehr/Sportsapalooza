@@ -76,6 +76,10 @@ public class ForceMotion {
 		constForce.set(constForce.x * (alongX ? -1 : 1), constForce.y * (alongY ? -1 : 1));
 	}
 	
+	public void stop() {
+		vel.set(0, 0);
+	}
+	
 	public void setFriction(float friction) {
 		this.friction = friction;
 	}

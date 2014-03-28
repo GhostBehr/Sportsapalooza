@@ -1,9 +1,7 @@
 package com.gamemen.sportsapalooza;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
-import android.graphics.RectF;
 
 public class Football extends Sprite {
 
@@ -33,6 +31,10 @@ public class Football extends Sprite {
 	
 	public void bounce(boolean alongX, boolean alongY) {
 		physics.bounce(alongX, alongY);
+	}
+	
+	public void stop() {
+		physics.stop();
 	}
 	
 }

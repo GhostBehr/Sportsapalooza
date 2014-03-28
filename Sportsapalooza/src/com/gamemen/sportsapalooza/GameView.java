@@ -3,16 +3,10 @@ package com.gamemen.sportsapalooza;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gamemen.sportsapalooza.Button.ButtonState;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -147,6 +141,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 			case GAME_OVER:
 				if (backBtn.isPressed()) {
 					currentState = GameStates.MAIN_MENU;
+					game = new Game(this);
 				}
 				break;
 		}

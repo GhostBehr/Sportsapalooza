@@ -13,6 +13,8 @@ public class BitmapLoader {
 	public static Bitmap bmpBtnAboutUp, bmpBtnAboutDown, bmpBtnBackUp, bmpBtnBackDown, bmpBtnPauseUp, bmpBtnPauseDown, bmpBtnPlayUp, bmpBtnPlayDown, bmpBtnSoundUp, bmpBtnSoundDown;
 	public static Bitmap bmpLeftDude, bmpRightDude, bmpFootball, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
 	
+	public static Bitmap bmpScoreTypes[];
+	
 	static void loadResources(DisplayMetrics metrics, Resources res) {
 		bitmapOptions = new Options();
 		bitmapOptions.inDensity = metrics.densityDpi;
@@ -48,5 +50,14 @@ public class BitmapLoader {
 		
 		// Explosion
 		bmpExplosion = BitmapFactory.decodeResource(res, R.drawable.explosion, bitmapOptions);
+		
+		// Score types
+		bmpScoreTypes = new Bitmap[6];
+		bmpScoreTypes[0] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[1] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[2] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[3] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[4] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[5] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 	}
 }
