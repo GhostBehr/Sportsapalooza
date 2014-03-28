@@ -102,6 +102,7 @@ public class Game {
 				break;
 				
 			case SCORED:
+				ball.pos.set(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2);
 				animTime += deltaTime;
 				
 				if (animTime >= SCORE_TIME) {

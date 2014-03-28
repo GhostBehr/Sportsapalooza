@@ -55,6 +55,7 @@ public class Endzone extends Button {
 	}
 	
 	public void explosion(FootballPlayer dude) {
+		gameView.removeOnTouchListener(dude.detonator);
 		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, explosionDuration));
 		
 		PointF direction = new PointF(ball.pos.x - dude.pos.x, ball.pos.y - dude.pos.y);
@@ -98,7 +99,7 @@ public class Endzone extends Button {
 						gameView,
 						isLeftSide,
 						new PointF(dugout.pos.x, pointerLoc.y),
-						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, pointerLoc)));
+						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF(pointerLoc.x, pointerLoc.y))));
 			}
 		}
 	}
@@ -113,6 +114,8 @@ public class Endzone extends Button {
 		for (FootballPlayer dude : dudes) {
 			dude.onDraw(canvas);
 		}
+		
 		dugout.onDraw(canvas);
+		
 	}
 }

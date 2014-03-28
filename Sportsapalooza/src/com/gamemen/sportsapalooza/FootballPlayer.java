@@ -15,7 +15,6 @@ public class FootballPlayer extends Sprite {
 	
 	public FootballPlayer(GameView gameView, boolean leftSide, PointF pos, Button detonator) {
 		super(gameView, leftSide ? BitmapLoader.bmpLeftDude : BitmapLoader.bmpRightDude, pos);
-		gameView.addOnTouchListener(detonator);
 		this.detonator = detonator;
 		motion = new SimpleMotion(new PointF(leftSide ? 100 : -100, 0));
 	}
