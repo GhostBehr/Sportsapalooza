@@ -38,6 +38,10 @@ public class Sprite {
 	//////////////////////////////////////////////////////
 	// GETTERS AND SETTERS
 	/////////////////////////////////////////////////////
+	public PointF getOrigin() {
+		return new PointF(pos.x + bounds.width()/2, pos.y + bounds.height()/2);
+	}
+	
 	public RectF getBounds() {
 		return new RectF(pos.x, pos.y, pos.x + bounds.width(), pos.y + bounds.height());
 	}

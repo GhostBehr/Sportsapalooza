@@ -25,9 +25,9 @@ public class Endzone extends Button {
 	private Sprite dugout;
 	
 	private final float blastForce = 10000f;
-	private final float blastRadius = 30.0f;
-	private final float dugoutOffset = 200f;
-	private final float explosionDuration = 0.5f;
+	private final float blastRadius = 100.0f;
+	private final float dugoutOffset = 240f;
+	private final float explosionDuration = 0.75f;
 
 	private int score = 0;
 	
@@ -58,7 +58,7 @@ public class Endzone extends Button {
 		gameView.removeOnTouchListener(dude.detonator);
 		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, explosionDuration));
 		
-		PointF direction = new PointF(ball.pos.x - dude.pos.x, ball.pos.y - dude.pos.y);
+		PointF direction = new PointF(ball.getOrigin().x - dude.getOrigin().x, ball.getOrigin().y - dude.getOrigin().y);
 		
 		float magnitude = direction.length();
 		
@@ -69,6 +69,8 @@ public class Endzone extends Button {
 	}
 	
 	public void update(float deltaTime) {
+		dugout.pos.set(isLeftSide ? ball.pos.x - dugoutOffset : ball.pos.x + dugoutOffset, dugout.pos.y);
+		
 		for(int i = explosions.size() - 1; i >= 0; --i) {
 			
 			explosions.get(i).update(deltaTime);
