@@ -19,4 +19,9 @@ public class SimpleMotion {
 	public PointF update(float deltaTime, PointF pos) {
 		return new PointF(pos.x + speed.x * deltaTime, pos.y + speed.y * deltaTime);
 	}
+	
+	public void bounce(boolean alongX, boolean alongY) {
+		speed.set(speed.x * (alongX ? -1 : 1), speed.y * (alongY ? -1 : 1));
+	}
+	
 }

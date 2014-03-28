@@ -35,11 +35,11 @@ public class Sprite {
 		canvas.drawBitmap(bmp, pos.x, pos.y, null);
 	}
 	
-	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	// GETTERS AND SETTERS
 	/////////////////////////////////////////////////////
 	public RectF getBounds() {
-		return new RectF(pos.x, pos.y, bounds.width(), bounds.height());
+		return new RectF(pos.x, pos.y, pos.x + bounds.width(), pos.y + bounds.height());
 	}
 	
 	public Bitmap getBmp() {
@@ -52,7 +52,7 @@ public class Sprite {
 	
 	protected void setBmp(Bitmap bmp, boolean setBounds) {
 		this.bmp = bmp;
-		bounds = new RectF(pos.x, pos.y, bounds.width(), bounds.height());
+		bounds = new RectF(0, 0, bmp.getWidth(), bmp.getHeight());
 	}
 	
 	public PointF getPosition() {

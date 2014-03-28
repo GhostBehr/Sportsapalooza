@@ -11,6 +11,8 @@ public class Football extends Sprite {
 	
 	public Football(GameView gameView, PointF pos) {
 		super(gameView, BitmapLoader.bmpFootball, pos);
+		
+		physics = new ForceMotion(1, 100);
 	}
 	
 	public void onDraw(Canvas canvas) {
@@ -28,4 +30,9 @@ public class Football extends Sprite {
 	public void addImpulseForce(PointF force) {
 		physics.addImpulseForce(force);
 	}
+	
+	public void bounce(boolean alongX, boolean alongY) {
+		physics.bounce(alongX, alongY);
+	}
+	
 }
