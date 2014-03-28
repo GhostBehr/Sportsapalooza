@@ -42,9 +42,9 @@ public class Endzone extends Button {
 		
 		PointF dugoutPos;
 		if (isLeftSide) {
-			dugoutPos = new PointF(dugoutOffset, gameView.SCREEN_SIZE.y/2);
+			dugoutPos = new PointF(dugoutOffset, GameView.SCREEN_SIZE.y/2);
 		} else {
-			dugoutPos = new PointF(pos.x - dugoutOffset, gameView.SCREEN_SIZE.y/2);			
+			dugoutPos = new PointF(pos.x - dugoutOffset, GameView.SCREEN_SIZE.y/2);			
 		}
 		
 		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, dugoutPos);
@@ -62,7 +62,7 @@ public class Endzone extends Button {
 		explosions.add(new Sprite(gameView, BitmapLoader.bmpExplosion, dude.pos));
 		PointF direction = new PointF(ball.pos.x - dude.pos.x, ball.pos.y - dude.pos.y);
 		float magnitude = direction.length();
-		if(magnitude <= 1){
+		if(magnitude <= 1) {
 			direction.set(direction.x/magnitude * blastForce, direction.y/magnitude * blastForce);
 			ball.addImpulseForce(direction);
 		}
@@ -95,6 +95,10 @@ public class Endzone extends Button {
 						new PointF(pointerLoc.x, pointerLoc.y + dugoutOffset),
 						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, pointerLoc)));
 			}
+		}
+		
+		for(FootballPlayer dude : dudes) {
+			dude.update(deltaTime);
 		}
 	}
 	
