@@ -68,12 +68,12 @@ public class Endzone extends Button {
 	}
 	
 	public void update(float deltaTime) {
-		for(TempSprite explosion : explosions) {
+		for(int i = explosions.size() - 1; i >= 0; --i) {
 			
-			explosion.update(deltaTime);
+			explosions.get(i).update(deltaTime);
 			
-			if (explosion.isFinished()) {
-				explosions.remove(explosion);
+			if (explosions.get(i).isFinished()) {
+				explosions.remove(i);
 			}
 		}
 		
@@ -82,10 +82,10 @@ public class Endzone extends Button {
 		}
 		
 		if(isPressed()) {
-			for (FootballPlayer dude : dudes) {
-				if (dude.detonator.isPressed()){
-					explosion(dude);
-					dudes.remove(dude);
+			for (int i = dudes.size() - 1; i >= 0; --i) {
+				if (dudes.get(i).detonator.isPressed()){
+					explosion(dudes.get(i));
+					dudes.remove(i);
 					dudesAvailable++;
 					return;
 				}
