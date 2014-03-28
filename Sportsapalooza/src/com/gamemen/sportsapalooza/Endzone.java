@@ -107,10 +107,6 @@ public class Endzone extends Button {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		Paint paint = new Paint();
-		paint.setARGB(255, 255, 0, 0);
-		canvas.drawRect(getBounds(), paint);
-		
 		for(Sprite explosion : explosions) {
 			explosion.onDraw(canvas);
 		}

@@ -62,6 +62,9 @@ public class GameOptions {
 	public static void setSound(boolean sound) {
 		GameOptions.sound = sound;
 	}
+	public static void toggleSound() {
+		sound = !sound;
+	}
 	
 	public static GameModes getGameMode() {
 		return gameMode;

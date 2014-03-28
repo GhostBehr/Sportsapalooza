@@ -117,7 +117,6 @@ public class Button extends Sprite implements OnTouchListener {
 	protected void resetState() {
 		state = ButtonState.UP;
 		pointers.clear();
-		pointerLoc.set(-1, -1);
 		if (getBmp() == buttonDown) {
 			setBmp(buttonUp);
 		}

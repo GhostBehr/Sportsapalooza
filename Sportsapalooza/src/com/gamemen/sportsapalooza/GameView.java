@@ -32,6 +32,9 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	public static PointF SCREEN_SIZE;
 	private DisplayMetrics metrics;
 	
+	// Buttons
+	private Button playBtn, aboutBtn, backBtn, soundBtn;
+	
 	// Objects
 	private Sprite field, scoreBar;
 	
@@ -39,10 +42,10 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	
 	public enum GameStates {
 		MAIN_MENU,
+		ABOUT,
 		SETUP,
 		PLAYING,
-		GAMEOVER,
-		ABOUT
+		GAME_OVER
 	}
 	
 	public GameView(Context context) {
@@ -70,12 +73,8 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		// GAME STUFF
 		////////////////////////////////////////////////////////
 		
-		currentState = GameStates.PLAYING;
+		currentState = GameStates.MAIN_MENU;
 		initialized = false;
-		
-		BitmapLoader.loadResources(metrics, getResources());
-		
-		game = new Game(this);
 	}
 	
 	public void onResume() {
@@ -83,7 +82,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		gameLoop.setRunning(true);
 		gameLoop.start();
 		
-		// possibly should move loadResources or whatever to here
+		BitmapLoader.loadResources(metrics, getResources());
 	}
 	
 	public void onPause() {
@@ -102,8 +101,15 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	private void init() {
 		initialized = true;
 		
+		game = new Game(this);
+		
 		scoreBar = new Sprite(this, BitmapLoader.bmpScoreBar);
 		field = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
+		
+		playBtn = new Button(this, BitmapLoader.bmpBtnPlayUp, BitmapLoader.bmpBtnPlayDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPlayUp.getWidth() / 2, SCREEN_SIZE.y / 5));
+		aboutBtn = new Button(this, BitmapLoader.bmpBtnAboutUp, BitmapLoader.bmpBtnAboutDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnAboutUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 2));
+		backBtn = new Button(this, BitmapLoader.bmpBtnBackUp, BitmapLoader.bmpBtnBackDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnBackUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 3));
+		soundBtn = new Button(this, BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnSoundUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 4));
 	}
 	
 	protected void update(float deltaTime) {
@@ -111,15 +117,40 @@ public class GameView extends SurfaceView implements OnTouchListener {
 			init();
 		}
 		
-		// BUTTONS
-		/////////////////////////////////////
-		
-		// UPDATES
-		/////////////////////////////////////
-		
-		if (currentState == GameStates.PLAYING) {
-			game.update(deltaTime);
+		switch(currentState) {
+			case MAIN_MENU:
+				if (playBtn.isPressed()) {
+					currentState = GameStates.PLAYING;
+				}
+				if (aboutBtn.isPressed()) {
+					currentState = GameStates.ABOUT;
+				}
+				if (soundBtn.isPressed()) {
+					GameOptions.toggleSound();
+				}
+				break;
+				
+			case ABOUT:
+				if (backBtn.isPressed()) {
+					currentState = GameStates.MAIN_MENU;
+				}
+				break;
+				
+			case SETUP:
+				// nothing right now
+				break;
+				
+			case PLAYING:
+				game.update(deltaTime);
+				break;
+				
+			case GAME_OVER:
+				if (backBtn.isPressed()) {
+					currentState = GameStates.MAIN_MENU;
+				}
+				break;
 		}
+		
 	}
 	
 	protected void onDraw(Canvas canvas) {
@@ -129,13 +160,36 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		scoreBar.onDraw(canvas);
 		field.onDraw(canvas);
 		
-		if (currentState == GameStates.PLAYING){
-			game.onDraw(canvas);
+		switch(currentState) {
+			case MAIN_MENU:
+				playBtn.onDraw(canvas);
+				aboutBtn.onDraw(canvas);
+				soundBtn.onDraw(canvas);
+				break;
+				
+			case ABOUT:
+				// draw about stuff
+				backBtn.onDraw(canvas);
+				break;
+				
+			case SETUP:
+				break;
+				
+			case PLAYING:
+				game.onDraw(canvas);
+				break;
+				
+			case GAME_OVER:
+				game.onDraw(canvas);
+				backBtn.onDraw(canvas);
+				// DRAW GAME OVER STUFF
+				break;
 		}
+		
 	}
 	
 	public void gameOver(int leftScore, int rightScore) {
-		this.currentState = GameStates.GAMEOVER;
+		this.currentState = GameStates.GAME_OVER;
 		
 		// Pass Game Over screen the score values
 	}
