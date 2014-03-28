@@ -22,7 +22,7 @@ public class Endzone extends Button {
 	private Sprite dugout;
 	
 	private final float blastForce = 10000f;
-	private final float blastRadius = 100.0f;
+	private final float blastRadius = 80.0f;
 	private final float dugoutOffset = 240f;
 	private final float explosionDuration = 0.75f;
 

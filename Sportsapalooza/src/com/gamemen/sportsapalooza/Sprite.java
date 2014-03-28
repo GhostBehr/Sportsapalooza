@@ -39,7 +39,7 @@ public class Sprite {
 	// GETTERS AND SETTERS
 	/////////////////////////////////////////////////////
 	public PointF getOrigin() {
-		return new PointF(bounds.centerX(), bounds.centerY());
+		return new PointF(pos.x + bounds.centerX(), pos.y + bounds.centerY());
 	}
 	
 	public RectF getBounds() {
