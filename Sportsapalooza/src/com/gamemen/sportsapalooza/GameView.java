@@ -78,6 +78,10 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	}
 	
 	public void onPause() {
+		if (currentState == GameStates.PLAYING) {
+			setCurrentState(GameStates.PAUSED);
+		}
+		
 		boolean retry = true;
 		gameLoop.setRunning(false);
 		
