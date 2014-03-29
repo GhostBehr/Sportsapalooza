@@ -1,9 +1,11 @@
 package com.gamemen.sportsapalooza;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import java.util.Random;
 
 public class Game {
 	
@@ -14,6 +16,8 @@ public class Game {
 		PAUSED,
 		GAME_OVER
 	}
+	
+	private Random rand;
 	
 	private GameView gameView;
 	private RectF bounds;
@@ -29,6 +33,7 @@ public class Game {
 	private Endzone leftEndzone, rightEndzone;
 	
 	public Game(GameView gameView) {
+		rand = new Random();
 		this.gameView = gameView;
 		GameOptions.setTimeLimit(GameOptions.TimeLimits.ONE_MIN);
 		
@@ -37,11 +42,32 @@ public class Game {
 		paint.setARGB(255, 255, 255, 255);
 		paint.setTextSize(25);
 		
-		ball = new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2));
+		ball = CreateBall();
 		leftEndzone = new Endzone(gameView, true, new PointF(0, 40), ball);
 		rightEndzone = new Endzone(gameView, false, new PointF(700, 40), ball);
 		
 		currentState = PlayStates.TEE_OFF;
+	}
+	
+	public Football CreateBall() {
+		int i = rand.nextInt(2);
+		
+		Bitmap bmp;
+		
+		switch(i){
+		default:
+		case 0:
+			bmp = BitmapLoader.bmpFootball;
+			break;
+		case 1:
+			bmp = BitmapLoader.bmpZebraball;
+			break;
+		case 2:
+			bmp = BitmapLoader.bmpBirdyball;
+			break;
+		}
+		
+		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2), bmp);
 	}
 	
 	public void update(float deltaTime) {

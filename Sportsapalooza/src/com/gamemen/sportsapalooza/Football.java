@@ -1,16 +1,16 @@
 package com.gamemen.sportsapalooza;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
 public class Football extends Sprite {
-
+	
 	private ForceMotion physics;
 	private float rotSpeed;
 	
-	public Football(GameView gameView, PointF pos) {
-		super(gameView, BitmapLoader.bmpFootball, pos, 0);
-		
+	public Football(GameView gameView, PointF pos, Bitmap bmp) {
+		super(gameView, bmp, pos, 0);
 		physics = new ForceMotion(1, 100);
 		rotSpeed = 0;
 	}

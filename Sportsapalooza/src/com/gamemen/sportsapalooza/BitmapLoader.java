@@ -11,7 +11,8 @@ public class BitmapLoader {
 	
 	public static Bitmap bmpField, bmpEndzone, bmpScoreBar;
 	public static Bitmap bmpBtnAboutUp, bmpBtnAboutDown, bmpBtnBackUp, bmpBtnBackDown, bmpBtnPauseUp, bmpBtnPauseDown, bmpBtnPlayUp, bmpBtnPlayDown, bmpBtnSoundUp, bmpBtnSoundDown;
-	public static Bitmap bmpLeftDude, bmpRightDude, bmpFootball, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
+	public static Bitmap bmpLeftDude, bmpRightDude, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
+	public static Bitmap bmpFootball, bmpZebraball, bmpBirdyball;
 	
 	public static Bitmap bmpScoreTypes[];
 	
@@ -46,7 +47,9 @@ public class BitmapLoader {
 		bmpDugout = BitmapFactory.decodeResource(res, R.drawable.dugout, bitmapOptions);
 		
 		// Football
-		bmpFootball = BitmapFactory.decodeResource(res, R.drawable.ball, bitmapOptions);
+		bmpFootball = BitmapFactory.decodeResource(res, R.drawable.ball_football, bitmapOptions);
+		bmpZebraball = BitmapFactory.decodeResource(res, R.drawable.ball_zebra, bitmapOptions);
+		bmpBirdyball = BitmapFactory.decodeResource(res, R.drawable.ball_birdy, bitmapOptions);
 		
 		// Explosion
 		bmpExplosion = BitmapFactory.decodeResource(res, R.drawable.explosion, bitmapOptions);
