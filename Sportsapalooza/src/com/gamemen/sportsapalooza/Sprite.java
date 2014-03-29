@@ -13,7 +13,7 @@ public class Sprite {
 	protected GameView gameView;
 	private Bitmap bmp;
 	protected PointF pos;
-	protected float rot;
+	private float rot;
 	private RectF bounds;
 	
 	public Sprite(GameView gameView, Bitmap bmp) {
@@ -32,7 +32,10 @@ public class Sprite {
 	}
 	
 	public void onDraw(Canvas canvas) {
+		PointF origin = getOrigin();
+		canvas.rotate(rot, origin.x, origin.y);
 		canvas.drawBitmap(bmp, pos.x, pos.y, null);
+		canvas.rotate(-rot, origin.x, origin.y);
 	}
 	
 	//////////////////////////////////////////////////////
@@ -59,8 +62,16 @@ public class Sprite {
 		bounds = new RectF(0, 0, bmp.getWidth(), bmp.getHeight());
 	}
 	
-	public PointF getPosition() {
+	public PointF getPos() {
 		return pos;
+	}
+	
+	public float getRot() {
+		return rot;
+	}
+	
+	public void setRot(float rot) {
+		this.rot = rot % 360f;
 	}
 	
 }
