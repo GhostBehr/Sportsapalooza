@@ -50,27 +50,6 @@ public class Game {
 		currentState = PlayStates.TEE_OFF;
 	}
 	
-	public Football CreateBall() {
-		int i = rand.nextInt(2);
-		
-		Bitmap bmp;
-		
-		switch(i){
-		default:
-		case 0:
-			bmp = BitmapLoader.bmpFootball;
-			break;
-		case 1:
-			bmp = BitmapLoader.bmpZebraball;
-			break;
-		case 2:
-			bmp = BitmapLoader.bmpBirdyball;
-			break;
-		}
-		
-		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2), bmp);
-	}
-	
 	public void update(float deltaTime) {
 		if (!paused) {
 			switch(currentState) {
@@ -130,14 +109,13 @@ public class Game {
 					break;
 					
 				case SCORED:
-					ball.pos.set(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2);
-					ball.stop();
-					
 					animTime += deltaTime;
 					
 					if (animTime >= SCORE_TIME) {
 						animTime = 0;
 						currentState = PlayStates.TEE_OFF;
+						
+						nextDown();
 					}
 					break;
 					
@@ -176,6 +154,38 @@ public class Game {
 				// nothing special basically
 				break;
 		}
+	}
+	
+	private void nextDown() {
+		// reset ball
+		ball = CreateBall();
+		leftEndzone.setBall(ball);
+		rightEndzone.setBall(ball);
+		
+		// reset dugouts
+		
+		// delete all players/detonators/explosions
+	}
+	
+	public Football CreateBall() {
+		int i = rand.nextInt(2);
+		
+		Bitmap bmp;
+		
+		switch(i){
+		default:
+		case 0:
+			bmp = BitmapLoader.bmpFootball;
+			break;
+		case 1:
+			bmp = BitmapLoader.bmpZebraball;
+			break;
+		case 2:
+			bmp = BitmapLoader.bmpBirdyball;
+			break;
+		}
+		
+		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2), bmp);
 	}
 	
 	public boolean isPaused() {

@@ -125,4 +125,7 @@ public class Endzone extends Button {
 		return scoreType;
 	}
 	
+	public void setBall(Football ball) {
+		this.ball = ball;
+	}
 }
