@@ -10,7 +10,7 @@ import android.graphics.PointF;
 public class Endzone extends Button {
 	private boolean isLeftSide;
 	
-	public static final String strScoreTypes[] = {" Touchhomes!", " Rundowns!", " Slamputts!", " Hole-in-Salchows!", " 7-10 Aces!", " Field Birdies!"};
+	public static final String SCORE_TYPES[] = {" Touchhomes!", " Rundowns!", " Slamputts!", " Hole-in-Dunks!", " 7-10 Aces!", " Field Birdies!", " Goal-in-Scores!"};
 	private int scoreType;
 	
 	private int dudesAvailable = 3;
@@ -21,10 +21,10 @@ public class Endzone extends Button {
 	private Football ball;
 	private Sprite dugout;
 	
-	private final float blastForce = 10000f;
-	private final float blastRadius = 80.0f;
-	private final float dugoutOffset = 240f;
-	private final float explosionDuration = 0.75f;
+	private final float BLAST_FORCE = 10000f;
+	private final float BLAST_RADIUS = 80.0f;
+	private final float DUGOUT_OFFSET = 240f;
+	private final float EXPLOSION_DURATION = 0.75f;
 
 	private int score = 0;
 	
@@ -32,7 +32,7 @@ public class Endzone extends Button {
 		super(gameView, BitmapLoader.bmpEndzone, pos);
 		
 		Random rand = new Random();
-		this.scoreType = rand.nextInt(Endzone.strScoreTypes.length);
+		this.scoreType = rand.nextInt(Endzone.SCORE_TYPES.length);
 		
 		this.isLeftSide = isLeftSide;
 		this.ball = ball;
@@ -41,7 +41,7 @@ public class Endzone extends Button {
 		
 		PointF dugoutPos;
 		
-		dugoutPos = new PointF(isLeftSide ? ball.pos.x - dugoutOffset : ball.pos.x + dugoutOffset, GameView.SCREEN_SIZE.y/2);
+		dugoutPos = new PointF(isLeftSide ? ball.pos.x - DUGOUT_OFFSET : ball.pos.x + DUGOUT_OFFSET, GameView.SCREEN_SIZE.y/2);
 		
 		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, dugoutPos);
 	}
@@ -56,20 +56,20 @@ public class Endzone extends Button {
 	
 	public void explosion(FootballPlayer dude) {
 		gameView.removeOnTouchListener(dude.detonator);
-		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, explosionDuration));
+		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, EXPLOSION_DURATION));
 		
 		PointF direction = new PointF(ball.getOrigin().x - dude.getOrigin().x, ball.getOrigin().y - dude.getOrigin().y);
 		
 		float magnitude = direction.length();
 		
-		if(magnitude <= blastRadius) {
-			direction.set((direction.x/magnitude) * blastForce, (direction.y/magnitude) * blastForce);
+		if(magnitude <= BLAST_RADIUS) {
+			direction.set((direction.x/magnitude) * BLAST_FORCE, (direction.y/magnitude) * BLAST_FORCE);
 			ball.addImpulseForce(direction);
 		}
 	}
 	
 	public void update(float deltaTime) {
-		dugout.pos.set(isLeftSide ? ball.pos.x - dugoutOffset : ball.pos.x + dugoutOffset, dugout.pos.y);
+		dugout.pos.set(isLeftSide ? ball.pos.x - DUGOUT_OFFSET : ball.pos.x + DUGOUT_OFFSET, dugout.pos.y);
 		
 		for(int i = explosions.size() - 1; i >= 0; --i) {
 			
@@ -101,7 +101,7 @@ public class Endzone extends Button {
 						gameView,
 						isLeftSide,
 						new PointF(dugout.pos.x, pointerLoc.y),
-						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF(pointerLoc.x, pointerLoc.y))));
+						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF((isLeftSide ? 34 : 734), pointerLoc.y - 16))));
 			}
 		}
 	}

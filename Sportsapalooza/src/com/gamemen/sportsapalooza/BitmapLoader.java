@@ -55,12 +55,13 @@ public class BitmapLoader {
 		bmpExplosion = BitmapFactory.decodeResource(res, R.drawable.explosion, bitmapOptions);
 		
 		// Score types
-		bmpScoreTypes = new Bitmap[6];
+		bmpScoreTypes = new Bitmap[Endzone.SCORE_TYPES.length];
 		bmpScoreTypes[0] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 		bmpScoreTypes[1] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 		bmpScoreTypes[2] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 		bmpScoreTypes[3] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 		bmpScoreTypes[4] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 		bmpScoreTypes[5] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[6] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
 	}
 }

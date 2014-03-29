@@ -13,7 +13,6 @@ public class Game {
 		TEE_OFF,
 		PLAYING,
 		SCORED,
-		PAUSED,
 		GAME_OVER
 	}
 	
@@ -21,9 +20,11 @@ public class Game {
 	
 	private GameView gameView;
 	private RectF bounds;
-	Paint paint;
+	private Paint paint;
 	
 	private PlayStates currentState;
+	private boolean paused = false;
+	
 	private final float TEE_TIME = 3;
 	private final float SCORE_TIME = 3;
 	private float animTime = 0;
@@ -71,85 +72,81 @@ public class Game {
 	}
 	
 	public void update(float deltaTime) {
-//		System.out.println("BALL: " + ball.pos.x + ", " + ball.pos.y);
-		
-		switch(currentState) {
-			case TEE_OFF:
-				animTime += deltaTime;
-				
-				if (animTime >= TEE_TIME) {
-					animTime = 0;
-					currentState = PlayStates.PLAYING;
+		if (!paused) {
+			switch(currentState) {
+				case TEE_OFF:
+					animTime += deltaTime;
 					
-					System.out.println("TEE TIME");
-					ball.addImpulseForce(new PointF(0, 10000));
-				}
+					if (animTime >= TEE_TIME) {
+						animTime = 0;
+						currentState = PlayStates.PLAYING;
+						
+						System.out.println("TEE TIME");
+						ball.addImpulseForce(new PointF(0, 10000));
+					}
+					
+					break;
+					
+				case PLAYING:
+					gameTime += deltaTime;
+					
+					if (gameTime >= GameOptions.getTimeLimit().getTime()) {
+						currentState = PlayStates.GAME_OVER;
+						gameView.gameOver(leftEndzone.getScore(), rightEndzone.getScore());
+					}
+					
+					ball.update(deltaTime);
+					leftEndzone.update(deltaTime);
+					rightEndzone.update(deltaTime);
+					
+					// Ball collision
+					if (ball.getBounds().left < bounds.left) {
+						ball.pos.x = bounds.left;
+						ball.bounce(true, false);
+					}
+					else if (ball.getBounds().right > bounds.right) {
+						ball.pos.x = bounds.right - ball.getBounds().width();
+						ball.bounce(true, false);
+					}
+					if (ball.getBounds().top < bounds.top) {
+						ball.pos.y = bounds.top;
+						ball.bounce(false, true);
+					}
+					else if (ball.getBounds().bottom > bounds.bottom) {
+						ball.pos.y = bounds.bottom - ball.getBounds().height();
+						ball.bounce(false, true);
+					}
+					
+					// Check for scoredown
+					if (leftEndzone.getBounds().contains(ball.getBounds())) {
+						leftEndzone.scorePlusPlus();
+						currentState = PlayStates.SCORED;
+					}
+					if (rightEndzone.getBounds().contains(ball.getBounds())) {
+						rightEndzone.scorePlusPlus();
+						currentState = PlayStates.SCORED;
+					}
+					
+					break;
+					
+				case SCORED:
+					ball.pos.set(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2);
+					ball.stop();
+					
+					animTime += deltaTime;
+					
+					if (animTime >= SCORE_TIME) {
+						animTime = 0;
+						currentState = PlayStates.TEE_OFF;
+					}
+					break;
+					
+				case GAME_OVER:
+					// GameView will still draw Game, but will overlap it's own GameOver screen
+					// So nothing happens here
+					break;
 				
-				break;
-				
-			case PLAYING:
-				gameTime += deltaTime;
-				
-				if (gameTime >= GameOptions.getTimeLimit().getTime()) {
-					currentState = PlayStates.GAME_OVER;
-					gameView.gameOver(leftEndzone.getScore(), rightEndzone.getScore());
-				}
-				
-				ball.update(deltaTime);
-				leftEndzone.update(deltaTime);
-				rightEndzone.update(deltaTime);
-				
-				// Ball collision
-				if (ball.getBounds().left < bounds.left) {
-					ball.pos.x = bounds.left;
-					ball.bounce(true, false);
-				}
-				else if (ball.getBounds().right > bounds.right) {
-					ball.pos.x = bounds.right - ball.getBounds().width();
-					ball.bounce(true, false);
-				}
-				if (ball.getBounds().top < bounds.top) {
-					ball.pos.y = bounds.top;
-					ball.bounce(false, true);
-				}
-				else if (ball.getBounds().bottom > bounds.bottom) {
-					ball.pos.y = bounds.bottom - ball.getBounds().height();
-					ball.bounce(false, true);
-				}
-				
-				// Check for scoredown
-				if (leftEndzone.getBounds().contains(ball.getBounds())) {
-					leftEndzone.scorePlusPlus();
-					currentState = PlayStates.SCORED;
-				}
-				if (rightEndzone.getBounds().contains(ball.getBounds())) {
-					rightEndzone.scorePlusPlus();
-					currentState = PlayStates.SCORED;
-				}
-				
-				break;
-				
-			case SCORED:
-				ball.pos.set(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2);
-				ball.stop();
-				
-				animTime += deltaTime;
-				
-				if (animTime >= SCORE_TIME) {
-					animTime = 0;
-					currentState = PlayStates.TEE_OFF;
-				}
-				break;
-				
-			case PAUSED:
-				// stop updating, update pause screen
-				break;
-				
-			case GAME_OVER:
-				// GameView will still draw Game, but will overlap it's own GameOver screen
-				// So nothing happens here
-				break;
-			
+			}
 		}
 	}
 	
@@ -158,8 +155,8 @@ public class Game {
 		rightEndzone.onDraw(canvas);
 		ball.onDraw(canvas);
 		
-		canvas.drawText(leftEndzone.getScore() + Endzone.strScoreTypes[leftEndzone.getScoreType()], 20, 30, paint);
-		canvas.drawText(rightEndzone.getScore() + Endzone.strScoreTypes[rightEndzone.getScoreType()], GameView.SCREEN_SIZE.x - 200, 30, paint);
+		canvas.drawText(leftEndzone.getScore() + Endzone.SCORE_TYPES[leftEndzone.getScoreType()], 20, 30, paint);
+		canvas.drawText(rightEndzone.getScore() + Endzone.SCORE_TYPES[rightEndzone.getScoreType()], GameView.SCREEN_SIZE.x - 200, 30, paint);
 		
 		switch(currentState) {
 			case TEE_OFF:
@@ -174,14 +171,19 @@ public class Game {
 				// draw you scored thing
 				break;
 				
-			case PAUSED:
-				// draw pause screen
-				break;
-				
 			case GAME_OVER:
 				// GameView will still draw Game, but will overlap it's own GameOver screen
 				// nothing special basically
 				break;
 		}
 	}
+	
+	public boolean isPaused() {
+		return paused;
+	}
+	
+	public void togglePause() {
+		paused = !paused;
+	}
+	
 }

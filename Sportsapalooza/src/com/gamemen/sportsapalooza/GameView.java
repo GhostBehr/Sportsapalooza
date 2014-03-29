@@ -27,7 +27,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	private DisplayMetrics metrics;
 	
 	// Buttons
-	private Button playBtn, aboutBtn, backBtn, soundBtn;
+	private Button playBtn, aboutBtn, backBtn, soundBtn, pauseBtn;
 	
 	// Objects
 	private Sprite field, scoreBar;
@@ -39,6 +39,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		ABOUT,
 		SETUP,
 		PLAYING,
+		PAUSED,
 		GAME_OVER
 	}
 	
@@ -100,10 +101,11 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		scoreBar = new Sprite(this, BitmapLoader.bmpScoreBar);
 		field = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
 		
-		playBtn = new Button(this, BitmapLoader.bmpBtnPlayUp, BitmapLoader.bmpBtnPlayDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPlayUp.getWidth() / 2, SCREEN_SIZE.y / 5));
-		aboutBtn = new Button(this, BitmapLoader.bmpBtnAboutUp, BitmapLoader.bmpBtnAboutDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnAboutUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 2));
-		backBtn = new Button(this, BitmapLoader.bmpBtnBackUp, BitmapLoader.bmpBtnBackDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnBackUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 3));
-		soundBtn = new Button(this, BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnSoundUp.getWidth() / 2, SCREEN_SIZE.y / 5 * 4));
+		playBtn = new Button(this, BitmapLoader.bmpBtnPlayUp, BitmapLoader.bmpBtnPlayDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPlayUp.getWidth() / 2, SCREEN_SIZE.y / 3));
+		aboutBtn = new Button(this, BitmapLoader.bmpBtnAboutUp, BitmapLoader.bmpBtnAboutDown, new PointF(SCREEN_SIZE.x / 4 - BitmapLoader.bmpBtnAboutUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
+		backBtn = new Button(this, BitmapLoader.bmpBtnBackUp, BitmapLoader.bmpBtnBackDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnBackUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
+		soundBtn = new Button(this, BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown, new PointF(SCREEN_SIZE.x / 4 * 3 - BitmapLoader.bmpBtnSoundUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
+		pauseBtn = new Button(this, BitmapLoader.bmpBtnPauseUp, BitmapLoader.bmpBtnPauseDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPauseUp.getWidth() / 2, 0));
 	}
 	
 	protected void update(float deltaTime) {
@@ -126,7 +128,12 @@ public class GameView extends SurfaceView implements OnTouchListener {
 				
 			case ABOUT:
 				if (backBtn.isPressed()) {
-					currentState = GameStates.MAIN_MENU;
+					if (game.isPaused()) {
+						currentState = GameStates.PLAYING;
+					}
+					else {
+						currentState = GameStates.MAIN_MENU;
+					}
 				}
 				break;
 				
@@ -135,7 +142,23 @@ public class GameView extends SurfaceView implements OnTouchListener {
 				break;
 				
 			case PLAYING:
-				game.update(deltaTime);
+				if (game.isPaused()) {
+					if (aboutBtn.isPressed()) {
+						currentState = GameStates.ABOUT;
+					}
+					if (soundBtn.isPressed()) {
+						GameOptions.toggleSound();
+					}
+					if (backBtn.isPressed()) {
+						game.togglePause();
+					}
+				}
+				else {
+					if (pauseBtn.isPressed()) {
+						game.togglePause();
+					}
+					game.update(deltaTime);
+				}
 				break;
 				
 			case GAME_OVER:
@@ -163,6 +186,11 @@ public class GameView extends SurfaceView implements OnTouchListener {
 				break;
 				
 			case ABOUT:
+				// can still be called from pause screen
+				if (game.isPaused()) {
+					game.onDraw(canvas);
+				}
+				
 				// draw about stuff
 				backBtn.onDraw(canvas);
 				break;
@@ -172,6 +200,15 @@ public class GameView extends SurfaceView implements OnTouchListener {
 				
 			case PLAYING:
 				game.onDraw(canvas);
+				
+				if (!game.isPaused()) {
+					pauseBtn.onDraw(canvas);
+				}
+				else {
+					aboutBtn.onDraw(canvas);
+					soundBtn.onDraw(canvas);
+					backBtn.onDraw(canvas);
+				}
 				break;
 				
 			case GAME_OVER:
@@ -207,8 +244,8 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		for (OnTouchListener listener : onTouchListeners) {
-			listener.onTouch(v, event);
+		for (int i = onTouchListeners.size() - 1; i >= 0; --i) {
+			onTouchListeners.get(i).onTouch(v, event);
 		}
 		
 		return true;
