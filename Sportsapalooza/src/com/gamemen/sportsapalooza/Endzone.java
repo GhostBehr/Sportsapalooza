@@ -29,7 +29,7 @@ public class Endzone extends Button {
 	private int score = 0;
 	
 	public Endzone(GameView gameView, boolean isLeftSide, PointF pos, Football ball) {
-		super(gameView, BitmapLoader.bmpEndzone, pos);
+		super(gameView, BitmapLoader.bmpEndzone, pos, false);
 		
 		Random rand = new Random();
 		this.scoreType = rand.nextInt(Endzone.SCORE_TYPES.length);

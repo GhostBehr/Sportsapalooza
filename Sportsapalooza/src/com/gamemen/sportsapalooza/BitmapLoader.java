@@ -10,9 +10,11 @@ public class BitmapLoader {
 	private static Options bitmapOptions;
 	
 	public static Bitmap bmpField, bmpEndzone, bmpScoreBar;
+	public static Bitmap bmpAbout, bmpPaused, bmpLeftWins, bmpRightWins, bmpTie;
 	public static Bitmap bmpBtnAboutUp, bmpBtnAboutDown, bmpBtnBackUp, bmpBtnBackDown, bmpBtnPauseUp, bmpBtnPauseDown, bmpBtnPlayUp, bmpBtnPlayDown, bmpBtnSoundUp, bmpBtnSoundDown;
 	public static Bitmap bmpLeftDude, bmpRightDude, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
 	public static Bitmap bmpFootball, bmpZebraball, bmpBirdyball;
+	public static Bitmap bmpTeeOff[];
 	
 	public static Bitmap bmpScoreTypes[];
 	
@@ -56,12 +58,26 @@ public class BitmapLoader {
 		
 		// Score types
 		bmpScoreTypes = new Bitmap[Endzone.SCORE_TYPES.length];
-		bmpScoreTypes[0] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[1] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[2] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[3] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[4] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[5] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
-		bmpScoreTypes[6] = BitmapFactory.decodeResource(res, R.drawable.btn_pause_down, bitmapOptions);
+		bmpScoreTypes[0] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[1] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[2] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[3] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[4] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[5] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpScoreTypes[6] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		
+		// Random screen stuff
+		bmpAbout = BitmapFactory.decodeResource(res, R.drawable.about, bitmapOptions);
+		bmpPaused = BitmapFactory.decodeResource(res, R.drawable.paused, bitmapOptions);
+		bmpLeftWins = BitmapFactory.decodeResource(res, R.drawable.left_wins, bitmapOptions);
+		bmpRightWins = BitmapFactory.decodeResource(res, R.drawable.right_wins, bitmapOptions);
+		bmpTie = BitmapFactory.decodeResource(res, R.drawable.btn_about_down, bitmapOptions);
+		
+		// Tee-Off
+		bmpTeeOff = new Bitmap[4];
+		bmpTeeOff[0] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
+		bmpTeeOff[1] = BitmapFactory.decodeResource(res, R.drawable.btn_play_down, bitmapOptions);
+		bmpTeeOff[2] = BitmapFactory.decodeResource(res, R.drawable.btn_play_up, bitmapOptions);
+		bmpTeeOff[3] = BitmapFactory.decodeResource(res, R.drawable.teeoff, bitmapOptions);
 	}
 }

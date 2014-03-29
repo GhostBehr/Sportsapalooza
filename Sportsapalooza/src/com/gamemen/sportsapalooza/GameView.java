@@ -30,14 +30,13 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	private Button playBtn, aboutBtn, backBtn, soundBtn, pauseBtn;
 	
 	// Objects
-	private Sprite field, scoreBar;
+	private Sprite fieldSprite, scoreBar, aboutSprite, pausedSprite, leftWinsSprite, rightWinsSprite, tieSprite;
 	
 	private Game game;
 	
 	public enum GameStates {
 		MAIN_MENU,
 		ABOUT,
-		SETUP,
 		PLAYING,
 		PAUSED,
 		GAME_OVER
@@ -67,8 +66,6 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		
 		// GAME STUFF
 		////////////////////////////////////////////////////////
-		
-		currentState = GameStates.MAIN_MENU;
 		initialized = false;
 	}
 	
@@ -99,13 +96,20 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		game = new Game(this);
 		
 		scoreBar = new Sprite(this, BitmapLoader.bmpScoreBar);
-		field = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
+		fieldSprite = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
+		aboutSprite = new Sprite(this, BitmapLoader.bmpAbout, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpAbout.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpAbout.getHeight() / 2));
+		pausedSprite = new Sprite(this, BitmapLoader.bmpPaused, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpPaused.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpPaused.getHeight() / 2));
+		leftWinsSprite = new Sprite(this, BitmapLoader.bmpLeftWins, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpLeftWins.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpLeftWins.getHeight() / 2));
+		rightWinsSprite = new Sprite(this, BitmapLoader.bmpRightWins, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpRightWins.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpRightWins.getHeight() / 2));
+		tieSprite = new Sprite(this, BitmapLoader.bmpTie, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpTie.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpTie.getHeight() / 2));
 		
-		playBtn = new Button(this, BitmapLoader.bmpBtnPlayUp, BitmapLoader.bmpBtnPlayDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPlayUp.getWidth() / 2, SCREEN_SIZE.y / 3));
-		aboutBtn = new Button(this, BitmapLoader.bmpBtnAboutUp, BitmapLoader.bmpBtnAboutDown, new PointF(SCREEN_SIZE.x / 4 - BitmapLoader.bmpBtnAboutUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
-		backBtn = new Button(this, BitmapLoader.bmpBtnBackUp, BitmapLoader.bmpBtnBackDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnBackUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
-		soundBtn = new Button(this, BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown, new PointF(SCREEN_SIZE.x / 4 * 3 - BitmapLoader.bmpBtnSoundUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2));
-		pauseBtn = new Button(this, BitmapLoader.bmpBtnPauseUp, BitmapLoader.bmpBtnPauseDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPauseUp.getWidth() / 2, 0));
+		playBtn = new Button(this, BitmapLoader.bmpBtnPlayUp, BitmapLoader.bmpBtnPlayDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPlayUp.getWidth() / 2, SCREEN_SIZE.y / 3), false);
+		aboutBtn = new Button(this, BitmapLoader.bmpBtnAboutUp, BitmapLoader.bmpBtnAboutDown, new PointF(SCREEN_SIZE.x / 4 - BitmapLoader.bmpBtnAboutUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2), false);
+		backBtn = new Button(this, BitmapLoader.bmpBtnBackUp, BitmapLoader.bmpBtnBackDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnBackUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2), false);
+		soundBtn = new Button(this, BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown, new PointF(SCREEN_SIZE.x / 4 * 3 - BitmapLoader.bmpBtnSoundUp.getWidth() / 2, SCREEN_SIZE.y / 3 * 2), false);
+		pauseBtn = new Button(this, BitmapLoader.bmpBtnPauseUp, BitmapLoader.bmpBtnPauseDown, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpBtnPauseUp.getWidth() / 2, 0), false);
+		
+		setCurrentState(GameStates.MAIN_MENU);
 	}
 	
 	protected void update(float deltaTime) {
@@ -116,10 +120,10 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		switch(currentState) {
 			case MAIN_MENU:
 				if (playBtn.isPressed()) {
-					currentState = GameStates.PLAYING;
+					setCurrentState(GameStates.PLAYING);
 				}
 				if (aboutBtn.isPressed()) {
-					currentState = GameStates.ABOUT;
+					setCurrentState(GameStates.ABOUT);
 				}
 				if (soundBtn.isPressed()) {
 					GameOptions.toggleSound();
@@ -129,41 +133,36 @@ public class GameView extends SurfaceView implements OnTouchListener {
 			case ABOUT:
 				if (backBtn.isPressed()) {
 					if (game.isPaused()) {
-						currentState = GameStates.PLAYING;
+						setCurrentState(GameStates.PAUSED);
 					}
 					else {
-						currentState = GameStates.MAIN_MENU;
+						setCurrentState(GameStates.MAIN_MENU);
 					}
 				}
 				break;
 				
-			case SETUP:
-				// nothing right now
+			case PAUSED:
+				if (aboutBtn.isPressed()) {
+					setCurrentState(GameStates.ABOUT);
+				}
+				if (soundBtn.isPressed()) {
+					GameOptions.toggleSound();
+				}
+				if (backBtn.isPressed()) {
+					setCurrentState(GameStates.PLAYING);
+				}
 				break;
 				
 			case PLAYING:
-				if (game.isPaused()) {
-					if (aboutBtn.isPressed()) {
-						currentState = GameStates.ABOUT;
-					}
-					if (soundBtn.isPressed()) {
-						GameOptions.toggleSound();
-					}
-					if (backBtn.isPressed()) {
-						game.togglePause();
-					}
+				if (pauseBtn.isPressed()) {
+					setCurrentState(GameStates.PAUSED);
 				}
-				else {
-					if (pauseBtn.isPressed()) {
-						game.togglePause();
-					}
-					game.update(deltaTime);
-				}
+				game.update(deltaTime);
 				break;
 				
 			case GAME_OVER:
 				if (backBtn.isPressed()) {
-					currentState = GameStates.MAIN_MENU;
+					setCurrentState(GameStates.MAIN_MENU);
 					game = new Game(this);
 				}
 				break;
@@ -176,7 +175,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		canvas.scale(metrics.widthPixels / SCREEN_SIZE.x, metrics.heightPixels / SCREEN_SIZE.y);
 		
 		scoreBar.onDraw(canvas);
-		field.onDraw(canvas);
+		fieldSprite.onDraw(canvas);
 		
 		switch(currentState) {
 			case MAIN_MENU:
@@ -191,39 +190,41 @@ public class GameView extends SurfaceView implements OnTouchListener {
 					game.onDraw(canvas);
 				}
 				
-				// draw about stuff
+				aboutSprite.onDraw(canvas);
 				backBtn.onDraw(canvas);
 				break;
 				
-			case SETUP:
+			case PAUSED:
+				game.onDraw(canvas);
+				pausedSprite.onDraw(canvas);
+				aboutBtn.onDraw(canvas);
+				soundBtn.onDraw(canvas);
+				backBtn.onDraw(canvas);
 				break;
 				
 			case PLAYING:
 				game.onDraw(canvas);
-				
-				if (!game.isPaused()) {
-					pauseBtn.onDraw(canvas);
-				}
-				else {
-					aboutBtn.onDraw(canvas);
-					soundBtn.onDraw(canvas);
-					backBtn.onDraw(canvas);
-				}
+				pauseBtn.onDraw(canvas);
 				break;
 				
 			case GAME_OVER:
 				game.onDraw(canvas);
 				backBtn.onDraw(canvas);
-				// DRAW GAME OVER STUFF
+				
+				int[] scores = game.getScores();
+				if (scores[0] > scores[1]) {
+					leftWinsSprite.onDraw(canvas);
+				}
+				else if (scores[0] < scores[1]) {
+					rightWinsSprite.onDraw(canvas);
+				}
+				else {
+					tieSprite.onDraw(canvas);
+				}
+				
 				break;
 		}
 		
-	}
-	
-	public void gameOver(int leftScore, int rightScore) {
-		this.currentState = GameStates.GAME_OVER;
-		
-		// Pass Game Over screen the score values
 	}
 	
 	public PointF worldPointToLocal(PointF worldPos) {
@@ -260,6 +261,53 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	}
 	public void setCurrentState(GameStates currentState) {
 		this.currentState = currentState;
+		
+		// Activate/disable buttons, pause
+		switch(currentState) {
+			case MAIN_MENU:
+				playBtn.setActive(true);
+				aboutBtn.setActive(true);
+				backBtn.setActive(false);
+				soundBtn.setActive(true);
+				pauseBtn.setActive(false);
+				break;
+				
+			case ABOUT:
+				playBtn.setActive(false);
+				aboutBtn.setActive(false);
+				backBtn.setActive(true);
+				soundBtn.setActive(false);
+				pauseBtn.setActive(false);
+				break;
+				
+			case PAUSED:
+				playBtn.setActive(false);
+				aboutBtn.setActive(true);
+				backBtn.setActive(true);
+				soundBtn.setActive(true);
+				pauseBtn.setActive(false);
+				
+				game.setPaused(true);
+				break;
+				
+			case PLAYING:
+				playBtn.setActive(false);
+				aboutBtn.setActive(false);
+				backBtn.setActive(false);
+				soundBtn.setActive(false);
+				pauseBtn.setActive(true);
+				
+				game.setPaused(false);
+				break;
+				
+			case GAME_OVER:
+				playBtn.setActive(false);
+				aboutBtn.setActive(false);
+				backBtn.setActive(true);
+				soundBtn.setActive(false);
+				pauseBtn.setActive(false);
+				break;
+		}
 	}
 	
 }

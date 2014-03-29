@@ -7,6 +7,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import java.util.Random;
 
+import com.gamemen.sportsapalooza.GameView.GameStates;
+
 public class Game {
 	
 	public enum PlayStates {
@@ -25,11 +27,13 @@ public class Game {
 	private PlayStates currentState;
 	private boolean paused = false;
 	
-	private final float TEE_TIME = 3;
-	private final float SCORE_TIME = 3;
+	private final float TEE_TIME = 4;
+	private final float SCORE_TIME = 5;
 	private float animTime = 0;
 	private float gameTime = 0;
+	private int teeState = 0;
 	
+	private Sprite teeOffSprite, scoredSprite; 
 	private Football ball;
 	private Endzone leftEndzone, rightEndzone;
 	
@@ -42,6 +46,8 @@ public class Game {
 		paint = new Paint();
 		paint.setARGB(255, 255, 255, 255);
 		paint.setTextSize(25);
+		
+		teeOffSprite = new Sprite(gameView, BitmapLoader.bmpTeeOff[0], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpTeeOff[0].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpTeeOff[0].getHeight() / 2));
 		
 		ball = CreateBall();
 		leftEndzone = new Endzone(gameView, true, new PointF(0, 40), ball);
@@ -56,12 +62,20 @@ public class Game {
 				case TEE_OFF:
 					animTime += deltaTime;
 					
+					if (animTime >= TEE_TIME / 4 * (teeState + 1)) {
+						teeOffSprite.setBmp(BitmapLoader.bmpTeeOff[++teeState]);
+					}
+					
 					if (animTime >= TEE_TIME) {
 						animTime = 0;
+						teeState = 0;
 						currentState = PlayStates.PLAYING;
 						
 						System.out.println("TEE TIME");
 						ball.addImpulseForce(new PointF(0, 10000));
+						
+						leftEndzone.setActive(true);
+						rightEndzone.setActive(true);
 					}
 					
 					break;
@@ -71,7 +85,7 @@ public class Game {
 					
 					if (gameTime >= GameOptions.getTimeLimit().getTime()) {
 						currentState = PlayStates.GAME_OVER;
-						gameView.gameOver(leftEndzone.getScore(), rightEndzone.getScore());
+						gameView.setCurrentState(GameStates.GAME_OVER);
 					}
 					
 					ball.update(deltaTime);
@@ -99,11 +113,19 @@ public class Game {
 					// Check for scoredown
 					if (leftEndzone.getBounds().contains(ball.getBounds())) {
 						leftEndzone.scorePlusPlus();
+						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getHeight() / 2));
 						currentState = PlayStates.SCORED;
+						
+						leftEndzone.setActive(false);
+						rightEndzone.setActive(false);
 					}
 					if (rightEndzone.getBounds().contains(ball.getBounds())) {
 						rightEndzone.scorePlusPlus();
+						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getHeight() / 2));
 						currentState = PlayStates.SCORED;
+						
+						leftEndzone.setActive(false);
+						rightEndzone.setActive(false);
 					}
 					
 					break;
@@ -138,7 +160,7 @@ public class Game {
 		
 		switch(currentState) {
 			case TEE_OFF:
-				// draw intro
+				teeOffSprite.onDraw(canvas);
 				break;
 				
 			case PLAYING:
@@ -146,7 +168,7 @@ public class Game {
 				break;
 				
 			case SCORED:
-				// draw you scored thing
+				scoredSprite.onDraw(canvas);
 				break;
 				
 			case GAME_OVER:
@@ -192,8 +214,16 @@ public class Game {
 		return paused;
 	}
 	
-	public void togglePause() {
-		paused = !paused;
+	public void setPaused(boolean paused) {
+		this.paused = paused;
+		
+		leftEndzone.setActive(!paused);
+		rightEndzone.setActive(!paused);
+	}
+	
+	public int[] getScores() {
+		int[] scores = { leftEndzone.getScore(), rightEndzone.getScore() };
+		return scores;
 	}
 	
 }

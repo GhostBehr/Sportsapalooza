@@ -15,6 +15,7 @@ public class Button extends Sprite implements OnTouchListener {
 	private ButtonState state;
 	private List<Integer> pointers;
 	protected PointF pointerLoc;
+	private boolean active;
 	
 	public enum ButtonState {
 		UP,
@@ -23,18 +24,27 @@ public class Button extends Sprite implements OnTouchListener {
 	}
 	
 	public Button(GameView gameView, Bitmap buttonUp, PointF pos) {
-		this(gameView, buttonUp, buttonUp, pos, 0);
+		this(gameView, buttonUp, buttonUp, pos, 0, true);
+	}
+	
+	public Button(GameView gameView, Bitmap buttonUp, PointF pos, boolean active) {
+		this(gameView, buttonUp, buttonUp, pos, 0, active);
 	}
 	
 	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos) {
-		this(gameView, buttonUp, buttonDown, pos, 0);
+		this(gameView, buttonUp, buttonDown, pos, 0, true);
 	}
 	
-	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos, float rot) {
+	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos, boolean active) {
+		this(gameView, buttonUp, buttonDown, pos, 0, active);
+	}
+	
+	public Button(GameView gameView, Bitmap buttonUp, Bitmap buttonDown, PointF pos, float rot, boolean active) {
 		super(gameView, buttonUp, pos, rot);
 		
 		this.buttonUp = buttonUp;
 		this.buttonDown = buttonDown;
+		this.active = active;
 		
 		state = ButtonState.UP;
 		pointers = new ArrayList<Integer>();
@@ -44,6 +54,10 @@ public class Button extends Sprite implements OnTouchListener {
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+		if (!active) {
+			return false;
+		}
+		
 		int actionIndex = event.getActionIndex();
 		Integer pointerID = event.getPointerId(actionIndex);
 		PointF pointerPos = new PointF(event.getX(actionIndex), event.getY(actionIndex));
@@ -107,6 +121,10 @@ public class Button extends Sprite implements OnTouchListener {
 	}
 
 	public boolean isPressed() {
+		if (!active) {
+			return false;
+		}
+		
 		if (state == ButtonState.TAPPED) {
 			resetState();
 			return true;
@@ -120,6 +138,14 @@ public class Button extends Sprite implements OnTouchListener {
 		if (getBmp() == buttonDown) {
 			setBmp(buttonUp);
 		}
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }
