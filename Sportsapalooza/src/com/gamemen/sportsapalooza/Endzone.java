@@ -77,7 +77,7 @@ public class Endzone extends Button {
 	}
 	
 	public void update(float deltaTime) {
-		dugout.pos.set(isLeftSide ? ball.pos.x - DUGOUT_OFFSET : ball.pos.x + DUGOUT_OFFSET, dugout.pos.y);
+		dugout.pos.set(isLeftSide ? Math.max(ball.pos.x - DUGOUT_OFFSET, getBounds().right) : Math.min(ball.pos.x + DUGOUT_OFFSET, getBounds().left), dugout.pos.y);
 		
 		for(int i = explosions.size() - 1; i >= 0; --i) {
 			
@@ -118,7 +118,7 @@ public class Endzone extends Button {
 				dudes.add(new FootballPlayer(
 						gameView,
 						isLeftSide,
-						new PointF(dugout.pos.x, pointerLoc.y),
+						new PointF(dugout.pos.x, pointerLoc.y - BitmapLoader.bmpLeftDude.getHeight() / 2),
 						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF((isLeftSide ? 34 : 734), pointerLoc.y - 16))));
 			}
 		}
