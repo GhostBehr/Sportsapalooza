@@ -112,16 +112,16 @@ public class Game {
 					
 					// Check for scoredown
 					if (leftEndzone.getBounds().contains(ball.getBounds())) {
-						leftEndzone.scorePlusPlus();
-						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getHeight() / 2));
+						rightEndzone.scorePlusPlus();
+						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getHeight() / 2));
 						currentState = PlayStates.SCORED;
 						
 						leftEndzone.setActive(false);
 						rightEndzone.setActive(false);
 					}
 					if (rightEndzone.getBounds().contains(ball.getBounds())) {
-						rightEndzone.scorePlusPlus();
-						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getHeight() / 2));
+						leftEndzone.scorePlusPlus();
+						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getHeight() / 2));
 						currentState = PlayStates.SCORED;
 						
 						leftEndzone.setActive(false);
