@@ -54,18 +54,26 @@ public class Endzone extends Button {
 		score += 1;
 	}
 	
-	public void explosion(FootballPlayer dude) {
+	public void explosion(int dudeIndex, boolean withForce) {
+		FootballPlayer dude = dudes.get(dudeIndex);
+		
 		gameView.removeOnTouchListener(dude.detonator);
 		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, EXPLOSION_DURATION));
 		
-		PointF direction = new PointF(ball.getOrigin().x - dude.getOrigin().x, ball.getOrigin().y - dude.getOrigin().y);
+		dudes.remove(dudeIndex);
+		dudesAvailable++;
 		
-		float magnitude = direction.length();
-		
-		if(magnitude <= BLAST_RADIUS) {
-			direction.set((direction.x/magnitude) * BLAST_FORCE, (direction.y/magnitude) * BLAST_FORCE);
-			ball.addImpulseForce(direction);
+		if (withForce) {
+			PointF direction = new PointF(ball.getOrigin().x - dude.getOrigin().x, ball.getOrigin().y - dude.getOrigin().y);
+			
+			float magnitude = direction.length();
+			
+			if(magnitude <= BLAST_RADIUS) {
+				direction.set((direction.x/magnitude) * BLAST_FORCE, (direction.y/magnitude) * BLAST_FORCE);
+				ball.addImpulseForce(direction);
+			}
 		}
+		
 	}
 	
 	public void update(float deltaTime) {
@@ -80,16 +88,26 @@ public class Endzone extends Button {
 			}
 		}
 		
-		for(FootballPlayer dude : dudes) {
-			dude.update(deltaTime);
+		for (int i = dudes.size() - 1; i >= 0; --i) {
+			dudes.get(i).update(deltaTime);
+			
+			if (isLeftSide) {
+				if (dudes.get(i).getBounds().left > 700) {
+					explosion(i, false);
+				}
+			}
+			else {
+				if (dudes.get(i).getBounds().right < 100) {
+					explosion(i, false);
+				}
+			}
+			
 		}
 		
 		if(isPressed()) {
 			for (int i = dudes.size() - 1; i >= 0; --i) {
 				if (dudes.get(i).detonator.isPressed()){
-					explosion(dudes.get(i));
-					dudes.remove(i);
-					dudesAvailable++;
+					explosion(i, true);
 					return;
 				}
 			}
@@ -119,6 +137,12 @@ public class Endzone extends Button {
 		
 		dugout.onDraw(canvas);
 		
+	}
+	
+	public void blowDudes() {
+		for (int i = dudes.size() - 1; i >= 0; --i) {
+			explosion(i, false);
+		}
 	}
 	
 	public int getScoreType() {

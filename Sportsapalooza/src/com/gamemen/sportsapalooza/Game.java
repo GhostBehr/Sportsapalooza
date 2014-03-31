@@ -112,20 +112,10 @@ public class Game {
 					
 					// Check for scoredown
 					if (leftEndzone.getBounds().contains(ball.getBounds())) {
-						rightEndzone.scorePlusPlus();
-						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[rightEndzone.getScoreType()].getHeight() / 2));
-						currentState = PlayStates.SCORED;
-						
-						leftEndzone.setActive(false);
-						rightEndzone.setActive(false);
+						scoreForEndzone(rightEndzone);
 					}
 					if (rightEndzone.getBounds().contains(ball.getBounds())) {
-						leftEndzone.scorePlusPlus();
-						scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[leftEndzone.getScoreType()].getHeight() / 2));
-						currentState = PlayStates.SCORED;
-						
-						leftEndzone.setActive(false);
-						rightEndzone.setActive(false);
+						scoreForEndzone(leftEndzone);
 					}
 					
 					break;
@@ -178,6 +168,18 @@ public class Game {
 		}
 	}
 	
+	private void scoreForEndzone(Endzone endzone) {
+		endzone.scorePlusPlus();
+		scoredSprite = new Sprite(gameView, BitmapLoader.bmpScoreTypes[endzone.getScoreType()], new PointF(GameView.SCREEN_SIZE.x / 2 - BitmapLoader.bmpScoreTypes[endzone.getScoreType()].getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - BitmapLoader.bmpScoreTypes[endzone.getScoreType()].getHeight() / 2));
+		currentState = PlayStates.SCORED;
+		
+		leftEndzone.setActive(false);
+		rightEndzone.setActive(false);
+		
+		leftEndzone.blowDudes();
+		rightEndzone.blowDudes();
+	}
+	
 	private void nextDown() {
 		// reset ball
 		ball = CreateBall();
@@ -185,12 +187,10 @@ public class Game {
 		rightEndzone.setBall(ball);
 		
 		// reset dugouts
-		
-		// delete all players/detonators/explosions
 	}
 	
 	public Football CreateBall() {
-		int i = rand.nextInt(2);
+		int i = rand.nextInt(3);
 		
 		Bitmap bmp;
 		
