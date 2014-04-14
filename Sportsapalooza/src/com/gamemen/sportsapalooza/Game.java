@@ -7,6 +7,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import java.util.Random;
 
+import com.gamemen.sportsapalooza.GameOptions.GameModes;
+import com.gamemen.sportsapalooza.GameOptions.ScoreLimits;
 import com.gamemen.sportsapalooza.GameView.GameStates;
 
 public class Game {
@@ -40,7 +42,11 @@ public class Game {
 	public Game(GameView gameView) {
 		rand = new Random();
 		this.gameView = gameView;
-		GameOptions.setTimeLimit(GameOptions.TimeLimits.ONE_MIN);
+		
+		// Game options
+		GameOptions.setGameMode(GameModes.SCORE_LIMIT);
+//		GameOptions.setTimeLimit(GameOptions.TimeLimits.ONE_MIN);
+		GameOptions.setScoreLimit(ScoreLimits.FIVE);
 		
 		bounds = new RectF(0, 40, 800, 480);
 		paint = new Paint();
@@ -64,6 +70,13 @@ public class Game {
 					
 					if (animTime >= TEE_TIME / 4 * (teeState + 1)) {
 						teeOffSprite.setBmp(BitmapLoader.bmpTeeOff[++teeState]);
+						
+						if (teeState != 3) {
+							Audio.play(Audio.countdown);
+						}
+						else {
+							Audio.play(Audio.teeoff);
+						}
 					}
 					
 					if (animTime >= TEE_TIME) {
@@ -72,6 +85,7 @@ public class Game {
 						currentState = PlayStates.PLAYING;
 						
 						System.out.println("TEE TIME");
+						Audio.play(Audio.bounce);
 						ball.addImpulseForce(new PointF(0, 10000));
 						
 						leftEndzone.setActive(true);
@@ -81,11 +95,15 @@ public class Game {
 					break;
 					
 				case PLAYING:
-					gameTime += deltaTime;
-					
-					if (gameTime >= GameOptions.getTimeLimit().getTime()) {
-						currentState = PlayStates.GAME_OVER;
-						gameView.setCurrentState(GameStates.GAME_OVER);
+					if (GameOptions.getGameMode() == GameModes.TIME_LIMIT) {
+						gameTime += deltaTime;
+						
+						if (gameTime >= GameOptions.getTimeLimit().getTime()) {
+							gameOver();
+						}
+					}
+					else if (leftEndzone.getScore() >= GameOptions.getScoreLimit().getScore() || rightEndzone.getScore() >= GameOptions.getScoreLimit().getScore()) {
+						gameOver();
 					}
 					
 					ball.update(deltaTime);
@@ -125,9 +143,17 @@ public class Game {
 					
 					if (animTime >= SCORE_TIME) {
 						animTime = 0;
-						currentState = PlayStates.TEE_OFF;
 						
-						nextDown();
+						if (GameOptions.getGameMode() == GameModes.SCORE_LIMIT) {
+							if (leftEndzone.getScore() >= GameOptions.getScoreLimit().getScore() || rightEndzone.getScore() >= GameOptions.getScoreLimit().getScore()) {
+								gameOver();
+							}
+						}
+						else {
+							currentState = PlayStates.TEE_OFF;
+							nextDown();
+						}
+						
 					}
 					break;
 					
@@ -209,6 +235,16 @@ public class Game {
 		
 		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2), bmp);
 	}
+	
+	private void gameOver() {
+		currentState = PlayStates.GAME_OVER;
+		gameView.setCurrentState(GameStates.GAME_OVER);
+	}
+	
+	
+	//////////////////////////////////////////////////////
+	// GETTERS AND SETTERS
+	/////////////////////////////////////////////////////
 	
 	public boolean isPaused() {
 		return paused;

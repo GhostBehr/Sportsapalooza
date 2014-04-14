@@ -1,7 +1,6 @@
 package com.gamemen.sportsapalooza;
 
 public class GameOptions {
-	private static boolean sound;
 	private static GameModes gameMode;
 	private static TimeLimits timeLimit;
 	private static ScoreLimits scoreLimit;
@@ -55,16 +54,6 @@ public class GameOptions {
 	//////////////////////////////////////////////////////
 	// GETTERS AND SETTERS
 	/////////////////////////////////////////////////////
-	
-	public static boolean getSound() {
-		return sound;
-	}
-	public static void setSound(boolean sound) {
-		GameOptions.sound = sound;
-	}
-	public static void toggleSound() {
-		sound = !sound;
-	}
 	
 	public static GameModes getGameMode() {
 		return gameMode;

@@ -75,12 +75,15 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		gameLoop.start();
 		
 		BitmapLoader.loadResources(metrics, getResources());
+		Audio.loadAudio(getContext());
 	}
 	
 	public void onPause() {
 		if (currentState == GameStates.PLAYING) {
 			setCurrentState(GameStates.PAUSED);
 		}
+		
+		Audio.release();
 		
 		boolean retry = true;
 		gameLoop.setRunning(false);
@@ -130,7 +133,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 					setCurrentState(GameStates.ABOUT);
 				}
 				if (soundBtn.isPressed()) {
-					GameOptions.toggleSound();
+					Audio.toggleSound();
 				}
 				break;
 				
@@ -150,7 +153,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 					setCurrentState(GameStates.ABOUT);
 				}
 				if (soundBtn.isPressed()) {
-					GameOptions.toggleSound();
+					Audio.toggleSound();
 				}
 				if (backBtn.isPressed()) {
 					setCurrentState(GameStates.PLAYING);

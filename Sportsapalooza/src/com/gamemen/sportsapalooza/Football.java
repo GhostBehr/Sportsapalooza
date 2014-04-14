@@ -37,6 +37,7 @@ public class Football extends Sprite {
 	
 	public void bounce(boolean alongX, boolean alongY) {
 		physics.bounce(alongX, alongY);
+		Audio.play(Audio.bounce);
 	}
 	
 	public void stop() {

@@ -51,6 +51,7 @@ public class Endzone extends Button {
 	}
 	
 	public void scorePlusPlus() {
+		Audio.play(Audio.crowd);
 		score += 1;
 	}
 	
@@ -60,6 +61,7 @@ public class Endzone extends Button {
 		gameView.removeOnTouchListener(dude.detonator);
 		explosions.add(new TempSprite(gameView, BitmapLoader.bmpExplosion, dude.pos, EXPLOSION_DURATION));
 		
+		Audio.play(Audio.explosion);
 		dudes.remove(dudeIndex);
 		dudesAvailable++;
 		

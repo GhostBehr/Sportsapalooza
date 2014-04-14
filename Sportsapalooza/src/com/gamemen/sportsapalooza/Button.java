@@ -127,6 +127,7 @@ public class Button extends Sprite implements OnTouchListener {
 		
 		if (state == ButtonState.TAPPED) {
 			resetState();
+			Audio.play(Audio.button);	// ololol
 			return true;
 		}
 		return false;
