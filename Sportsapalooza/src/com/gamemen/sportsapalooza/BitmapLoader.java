@@ -45,8 +45,8 @@ public class BitmapLoader {
 		
 		// Endzone
 		bmpEndzone = BitmapFactory.decodeResource(res, R.drawable.endzone, bitmapOptions);
-		bmpLeftDude = BitmapFactory.decodeResource(res, R.drawable.dude, bitmapOptions);
-		bmpRightDude = BitmapFactory.decodeResource(res, R.drawable.dude, bitmapOptions);
+		bmpLeftDude = BitmapFactory.decodeResource(res, R.drawable.leftdude, bitmapOptions);
+		bmpRightDude = BitmapFactory.decodeResource(res, R.drawable.rightdude, bitmapOptions);
 		bmpDetonatorUp = BitmapFactory.decodeResource(res, R.drawable.detonator_up, bitmapOptions);
 		bmpDetonatorDown = BitmapFactory.decodeResource(res, R.drawable.detonator_down, bitmapOptions);
 		
