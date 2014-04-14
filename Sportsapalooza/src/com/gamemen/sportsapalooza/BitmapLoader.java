@@ -9,12 +9,14 @@ import android.util.DisplayMetrics;
 public class BitmapLoader {
 	private static Options bitmapOptions;
 	
-	public static Bitmap bmpField, bmpEndzone, bmpScoreBar;
+	public static Bitmap bmpTitle, bmpField, bmpEndzone, bmpScoreBar;
 	public static Bitmap bmpAbout, bmpPaused, bmpLeftWins, bmpRightWins, bmpTie;
-	public static Bitmap bmpBtnAboutUp, bmpBtnAboutDown, bmpBtnBackUp, bmpBtnBackDown, bmpBtnPauseUp, bmpBtnPauseDown, bmpBtnPlayUp, bmpBtnPlayDown, bmpBtnSoundUp, bmpBtnSoundDown;
-	public static Bitmap bmpLeftDude, bmpRightDude, bmpDugout, bmpDetonatorUp, bmpDetonatorDown, bmpExplosion;
+	public static Bitmap bmpBtnAboutUp, bmpBtnAboutDown, bmpBtnBackUp, bmpBtnBackDown, bmpBtnPauseUp, bmpBtnPauseDown, bmpBtnPlayUp, bmpBtnPlayDown;
+	public static Bitmap bmpBtnSoundUp, bmpBtnSoundDown, bmpBtnSoundOffUp, bmpBtnSoundOffDown;
+	public static Bitmap bmpLeftDude, bmpRightDude, bmpDugout, bmpDetonatorUp, bmpDetonatorDown;
 	public static Bitmap bmpFootball, bmpZebraball, bmpBirdyball;
 	public static Bitmap bmpTeeOff[];
+	public static Bitmap bmpExplosion[];
 	
 	public static Bitmap bmpScoreTypes[];
 	
@@ -23,6 +25,7 @@ public class BitmapLoader {
 		bitmapOptions.inDensity = metrics.densityDpi;
 		
 		// GameView
+		bmpTitle = BitmapFactory.decodeResource(res, R.drawable.title, bitmapOptions);
 		bmpField = BitmapFactory.decodeResource(res, R.drawable.field, bitmapOptions);
 		bmpScoreBar = BitmapFactory.decodeResource(res, R.drawable.score, bitmapOptions);
 		
@@ -37,11 +40,13 @@ public class BitmapLoader {
 		bmpBtnPlayDown = BitmapFactory.decodeResource(res, R.drawable.btn_play_down, bitmapOptions);
 		bmpBtnSoundUp = BitmapFactory.decodeResource(res, R.drawable.btn_sound_up, bitmapOptions);
 		bmpBtnSoundDown = BitmapFactory.decodeResource(res, R.drawable.btn_sound_down, bitmapOptions);
+		bmpBtnSoundOffUp = BitmapFactory.decodeResource(res, R.drawable.btn_soundoff_up, bitmapOptions);
+		bmpBtnSoundOffDown = BitmapFactory.decodeResource(res, R.drawable.btn_soundoff_down, bitmapOptions);
 		
 		// Endzone
 		bmpEndzone = BitmapFactory.decodeResource(res, R.drawable.endzone, bitmapOptions);
-		bmpLeftDude = BitmapFactory.decodeResource(res, R.drawable.leftdude, bitmapOptions);
-		bmpRightDude = BitmapFactory.decodeResource(res, R.drawable.rightdude, bitmapOptions);
+		bmpLeftDude = BitmapFactory.decodeResource(res, R.drawable.dude, bitmapOptions);
+		bmpRightDude = BitmapFactory.decodeResource(res, R.drawable.dude, bitmapOptions);
 		bmpDetonatorUp = BitmapFactory.decodeResource(res, R.drawable.detonator_up, bitmapOptions);
 		bmpDetonatorDown = BitmapFactory.decodeResource(res, R.drawable.detonator_down, bitmapOptions);
 		
@@ -54,7 +59,11 @@ public class BitmapLoader {
 		bmpBirdyball = BitmapFactory.decodeResource(res, R.drawable.ball_birdy, bitmapOptions);
 		
 		// Explosion
-		bmpExplosion = BitmapFactory.decodeResource(res, R.drawable.explosion, bitmapOptions);
+		bmpExplosion = new Bitmap[4];
+		bmpExplosion[0] = BitmapFactory.decodeResource(res, R.drawable.explosion_3, bitmapOptions);
+		bmpExplosion[1] = BitmapFactory.decodeResource(res, R.drawable.explosion_1, bitmapOptions);
+		bmpExplosion[2] = BitmapFactory.decodeResource(res, R.drawable.explosion_2, bitmapOptions);
+		bmpExplosion[3] = bmpExplosion[0];
 		
 		// Score types
 		bmpScoreTypes = new Bitmap[Endzone.SCORE_TYPES.length];
@@ -71,13 +80,13 @@ public class BitmapLoader {
 		bmpPaused = BitmapFactory.decodeResource(res, R.drawable.paused, bitmapOptions);
 		bmpLeftWins = BitmapFactory.decodeResource(res, R.drawable.left_wins, bitmapOptions);
 		bmpRightWins = BitmapFactory.decodeResource(res, R.drawable.right_wins, bitmapOptions);
-		bmpTie = BitmapFactory.decodeResource(res, R.drawable.btn_about_down, bitmapOptions);
+		bmpTie = BitmapFactory.decodeResource(res, R.drawable.tie, bitmapOptions);
 		
 		// Tee-Off
 		bmpTeeOff = new Bitmap[4];
-		bmpTeeOff[0] = BitmapFactory.decodeResource(res, R.drawable.scored, bitmapOptions);
-		bmpTeeOff[1] = BitmapFactory.decodeResource(res, R.drawable.btn_play_down, bitmapOptions);
-		bmpTeeOff[2] = BitmapFactory.decodeResource(res, R.drawable.btn_play_up, bitmapOptions);
+		bmpTeeOff[0] = BitmapFactory.decodeResource(res, R.drawable.three, bitmapOptions);
+		bmpTeeOff[1] = BitmapFactory.decodeResource(res, R.drawable.two, bitmapOptions);
+		bmpTeeOff[2] = BitmapFactory.decodeResource(res, R.drawable.one, bitmapOptions);
 		bmpTeeOff[3] = BitmapFactory.decodeResource(res, R.drawable.teeoff, bitmapOptions);
 	}
 }

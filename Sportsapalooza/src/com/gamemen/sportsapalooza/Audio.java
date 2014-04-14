@@ -36,5 +36,11 @@ public class Audio {
 			volume = 100;
 		}
 	}
+	
+	public static boolean getSound() {
+		return volume == 0 ? false : true;
+	}
 
 }
+
+	

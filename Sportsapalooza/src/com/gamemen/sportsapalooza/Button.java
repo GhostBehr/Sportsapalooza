@@ -149,4 +149,14 @@ public class Button extends Sprite implements OnTouchListener {
 		this.active = active;
 	}
 	
+	public void setBitmap(Bitmap bmp) {
+		setBitmaps(bmp, bmp);
+	}
+	
+	public void setBitmaps(Bitmap bmpUp, Bitmap bmpDown) {
+		buttonUp = bmpUp;
+		buttonDown = bmpDown;
+		super.setBmp(buttonUp);
+	}
+	
 }

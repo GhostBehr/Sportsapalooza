@@ -30,7 +30,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	private Button playBtn, aboutBtn, backBtn, soundBtn, pauseBtn;
 	
 	// Objects
-	private Sprite fieldSprite, scoreBar, aboutSprite, pausedSprite, leftWinsSprite, rightWinsSprite, tieSprite;
+	private Sprite titleSprite, fieldSprite, scoreBar, aboutSprite, pausedSprite, leftWinsSprite, rightWinsSprite, tieSprite;
 	
 	private Game game;
 	
@@ -102,8 +102,9 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		
 		game = new Game(this);
 		
+		titleSprite = new Sprite(this, BitmapLoader.bmpTitle, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpTitle.getWidth() / 2, 40));
 		scoreBar = new Sprite(this, BitmapLoader.bmpScoreBar);
-		fieldSprite = new Sprite(this, BitmapLoader.bmpField, new PointF(100, 40));
+		fieldSprite = new Sprite(this, BitmapLoader.bmpField, new PointF(0, 40));
 		aboutSprite = new Sprite(this, BitmapLoader.bmpAbout, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpAbout.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpAbout.getHeight() / 2));
 		pausedSprite = new Sprite(this, BitmapLoader.bmpPaused, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpPaused.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpPaused.getHeight() / 2));
 		leftWinsSprite = new Sprite(this, BitmapLoader.bmpLeftWins, new PointF(SCREEN_SIZE.x / 2 - BitmapLoader.bmpLeftWins.getWidth() / 2, SCREEN_SIZE.y / 2 - BitmapLoader.bmpLeftWins.getHeight() / 2));
@@ -133,7 +134,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 					setCurrentState(GameStates.ABOUT);
 				}
 				if (soundBtn.isPressed()) {
-					Audio.toggleSound();
+					toggleSound();
 				}
 				break;
 				
@@ -153,7 +154,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 					setCurrentState(GameStates.ABOUT);
 				}
 				if (soundBtn.isPressed()) {
-					Audio.toggleSound();
+					toggleSound();
 				}
 				if (backBtn.isPressed()) {
 					setCurrentState(GameStates.PLAYING);
@@ -186,6 +187,7 @@ public class GameView extends SurfaceView implements OnTouchListener {
 		
 		switch(currentState) {
 			case MAIN_MENU:
+				titleSprite.onDraw(canvas);
 				playBtn.onDraw(canvas);
 				aboutBtn.onDraw(canvas);
 				soundBtn.onDraw(canvas);
@@ -236,6 +238,16 @@ public class GameView extends SurfaceView implements OnTouchListener {
 	
 	public PointF worldPointToLocal(PointF worldPos) {
 		return new PointF(worldPos.x * SCREEN_SIZE.x / metrics.widthPixels, worldPos.y * SCREEN_SIZE.y / metrics.heightPixels);
+	}
+	
+	private void toggleSound() {
+		Audio.toggleSound();
+		if (Audio.getSound()) {
+			soundBtn.setBitmaps(BitmapLoader.bmpBtnSoundUp, BitmapLoader.bmpBtnSoundDown);
+		}
+		else {
+			soundBtn.setBitmaps(BitmapLoader.bmpBtnSoundOffUp, BitmapLoader.bmpBtnSoundOffDown);
+		}
 	}
 	
 	/////////////////////////////////////////////////////////////

@@ -23,8 +23,8 @@ public class Endzone extends Button {
 	
 	private final float BLAST_FORCE = 10000f;
 	private final float BLAST_RADIUS = 80.0f;
-	private final float DUGOUT_OFFSET = 240f;
-	private final float EXPLOSION_DURATION = 0.75f;
+	private final float DUGOUT_OFFSET = 260f;
+	private final float EXPLOSION_DURATION = 0.4f;
 
 	private int score = 0;
 	
@@ -39,11 +39,8 @@ public class Endzone extends Button {
 		dudes = new ArrayList<FootballPlayer>(3);
 		explosions = new ArrayList<TempSprite>(3);
 		
-		PointF dugoutPos;
-		
-		dugoutPos = new PointF(isLeftSide ? ball.pos.x - DUGOUT_OFFSET : ball.pos.x + DUGOUT_OFFSET, GameView.SCREEN_SIZE.y/2);
-		
-		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, dugoutPos);
+		PointF dugoutPos = new PointF(isLeftSide ? ball.pos.x - DUGOUT_OFFSET : ball.pos.x + DUGOUT_OFFSET, 260 - BitmapLoader.bmpDugout.getHeight() / 2);
+		dugout = new Sprite(gameView, BitmapLoader.bmpDugout, dugoutPos, isLeftSide ? 180 : 0);
 	}
 	
 	public int getScore() {
@@ -79,7 +76,7 @@ public class Endzone extends Button {
 	}
 	
 	public void update(float deltaTime) {
-		dugout.pos.set(isLeftSide ? Math.max(ball.pos.x - DUGOUT_OFFSET, getBounds().right) : Math.min(ball.pos.x + DUGOUT_OFFSET, getBounds().left), dugout.pos.y);
+		dugout.pos.set(isLeftSide ? Math.max(ball.pos.x - DUGOUT_OFFSET, getBounds().right - dugout.getBounds().width()) : Math.min(ball.pos.x + DUGOUT_OFFSET, getBounds().left), dugout.pos.y);
 		
 		for(int i = explosions.size() - 1; i >= 0; --i) {
 			
@@ -121,7 +118,8 @@ public class Endzone extends Button {
 						gameView,
 						isLeftSide,
 						new PointF(dugout.pos.x, pointerLoc.y - BitmapLoader.bmpLeftDude.getHeight() / 2),
-						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF((isLeftSide ? 34 : 734), pointerLoc.y - 16))));
+						new Button(gameView, BitmapLoader.bmpDetonatorUp, BitmapLoader.bmpDetonatorDown, new PointF((isLeftSide ? 34 : 734), pointerLoc.y - 16)),
+						isLeftSide ? 90 : -90));
 			}
 		}
 	}

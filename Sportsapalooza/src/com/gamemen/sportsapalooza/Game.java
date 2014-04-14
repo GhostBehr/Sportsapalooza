@@ -30,7 +30,7 @@ public class Game {
 	private boolean paused = false;
 	
 	private final float TEE_TIME = 4;
-	private final float SCORE_TIME = 5;
+	private final float SCORE_TIME = 3;
 	private float animTime = 0;
 	private float gameTime = 0;
 	private int teeState = 0;
@@ -69,7 +69,8 @@ public class Game {
 					animTime += deltaTime;
 					
 					if (animTime >= TEE_TIME / 4 * (teeState + 1)) {
-						teeOffSprite.setBmp(BitmapLoader.bmpTeeOff[++teeState]);
+						teeOffSprite.setBmp(BitmapLoader.bmpTeeOff[++teeState], true);
+						teeOffSprite.pos.set(GameView.SCREEN_SIZE.x / 2 - teeOffSprite.getBounds().width() / 2, GameView.SCREEN_SIZE.y / 2 - teeOffSprite.getBounds().height() / 2);
 						
 						if (teeState != 3) {
 							Audio.play(Audio.countdown);
@@ -82,11 +83,16 @@ public class Game {
 					if (animTime >= TEE_TIME) {
 						animTime = 0;
 						teeState = 0;
+						
+						teeOffSprite.setBmp(BitmapLoader.bmpTeeOff[0], true);
+						teeOffSprite.pos.set(GameView.SCREEN_SIZE.x / 2 - teeOffSprite.getBounds().width() / 2, GameView.SCREEN_SIZE.y / 2 - teeOffSprite.getBounds().height() / 2);
 						currentState = PlayStates.PLAYING;
 						
 						System.out.println("TEE TIME");
 						Audio.play(Audio.bounce);
-						ball.addImpulseForce(new PointF(0, 10000));
+						
+						Random rand = new Random();
+						ball.addImpulseForce(new PointF(0, 10000 * (rand.nextBoolean() ? 1 : -1)));
 						
 						leftEndzone.setActive(true);
 						rightEndzone.setActive(true);
@@ -141,11 +147,15 @@ public class Game {
 				case SCORED:
 					animTime += deltaTime;
 					
+					// For explosions
+					leftEndzone.update(deltaTime);
+					rightEndzone.update(deltaTime);
+					
 					if (animTime >= SCORE_TIME) {
 						animTime = 0;
 						
-						if (GameOptions.getGameMode() == GameModes.SCORE_LIMIT) {
-							if (leftEndzone.getScore() >= GameOptions.getScoreLimit().getScore() || rightEndzone.getScore() >= GameOptions.getScoreLimit().getScore()) {
+						if (leftEndzone.getScore() >= GameOptions.getScoreLimit().getScore() || rightEndzone.getScore() >= GameOptions.getScoreLimit().getScore()) {
+							if (GameOptions.getGameMode() == GameModes.SCORE_LIMIT) {	
 								gameOver();
 							}
 						}
@@ -213,6 +223,8 @@ public class Game {
 		rightEndzone.setBall(ball);
 		
 		// reset dugouts
+		leftEndzone.update(1);
+		rightEndzone.update(1);
 	}
 	
 	public Football CreateBall() {
@@ -233,7 +245,7 @@ public class Game {
 			break;
 		}
 		
-		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x/2, GameView.SCREEN_SIZE.y/2), bmp);
+		return new Football(gameView, new PointF(GameView.SCREEN_SIZE.x / 2 - bmp.getWidth() / 2, GameView.SCREEN_SIZE.y / 2 - bmp.getHeight() / 2), bmp);
 	}
 	
 	private void gameOver() {
